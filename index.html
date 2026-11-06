@@ -1,384 +1,1763 @@
 <!DOCTYPE html>
 <html lang="bn">
+
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width,initial-scale=1">
-<meta name="color-scheme" content="light">
-<title>SQL Query Simulator — HSC ICT</title>
-<style>
-:root{--ink:#14213b;--muted:#66748b;--line:#dde5f1;--bg:#f4f7fc;--blue:#5146df;--blue2:#6e62e8;--mint:#0d906f;--rose:#c64c51;--white:#fff;--code:#141e33;--shadow:0 10px 34px rgba(25,40,84,.07)}
-*{box-sizing:border-box}html{scroll-behavior:smooth}body{margin:0;background:var(--bg);color:var(--ink);font-family:ui-sans-serif,-apple-system,BlinkMacSystemFont,"Noto Sans Bengali","Hind Siliguri","Segoe UI",sans-serif;line-height:1.55}
-button,textarea{font:inherit}button{cursor:pointer}button:focus-visible,textarea:focus-visible{outline:3px solid #a5a1ff;outline-offset:3px}
-.container{max-width:1330px;margin:auto;padding:24px 22px 46px}.hero{border-radius:22px;background:linear-gradient(112deg,#17264b 0%,#322c79 52%,#544bc4 100%);padding:29px 32px;color:#fff;position:relative;overflow:hidden;box-shadow:0 12px 32px rgba(34,37,107,.15)}.hero:before{content:'';position:absolute;width:250px;height:250px;right:-40px;top:-105px;border:1px solid rgba(255,255,255,.18);border-radius:50%;box-shadow:0 0 0 50px rgba(255,255,255,.035),0 0 0 110px rgba(255,255,255,.025)}.eyebrow{display:inline-flex;align-items:center;gap:9px;background:rgba(255,255,255,.13);border:1px solid rgba(255,255,255,.2);border-radius:100px;padding:5px 11px;font-size:12px;letter-spacing:.9px;font-weight:800}.dot{width:7px;height:7px;border-radius:50%;background:#4ce3ae;display:inline-block}.hero h1{font-size:clamp(27px,4vw,39px);line-height:1.24;margin:13px 0 5px;letter-spacing:-.8px}.hero p{max-width:770px;opacity:.88;font-size:14px;margin:0}.hero-stats{display:flex;flex-wrap:wrap;gap:9px;margin-top:20px}.hero-stats span{padding:7px 12px;border-radius:9px;border:1px solid rgba(255,255,255,.19);background:rgba(255,255,255,.09);font-size:13px}.hero-stats strong{font-size:15px;margin-right:4px}
-.tip{background:#edf0ff;color:#443ca7;border:1px solid #d9ddff;border-radius:12px;padding:11px 14px;font-size:13px;margin:16px 0 18px}.layout{display:grid;grid-template-columns:minmax(0,1.05fr) minmax(0,1fr);gap:18px;align-items:start}.panel{background:#fff;border:1px solid var(--line);box-shadow:var(--shadow);border-radius:18px;overflow:hidden}.panel-head{padding:18px 21px 14px;border-bottom:1px solid #eff2f8;display:flex;align-items:center;justify-content:space-between;gap:10px}.panel-title{margin:0;font-size:18px;letter-spacing:-.3px}.panel-sub{color:var(--muted);font-size:12px;margin:3px 0 0}.badge{font-size:11px;background:#f0efff;color:#4b41c7;border-radius:50px;padding:5px 10px;font-weight:800;white-space:nowrap}.section-in{padding:18px 20px}.guide-label{font-size:12px;font-weight:800;color:#65748e;margin-bottom:10px;display:block}.query-buttons{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px}.query-chip{border:1px solid var(--line);border-radius:10px;background:#f9faff;text-align:left;padding:11px 11px;min-height:69px;transition:background .15s,border-color .15s}.query-chip:hover{border-color:#b1aaff;background:#f1efff}.query-chip.active{background:#efedff;border-color:#8276eb;box-shadow:inset 0 0 0 1px #8276eb}.query-chip .chip-name{font:800 12px ui-monospace,Menlo,Consolas,monospace;display:block;color:#554bca}.query-chip .chip-desc{font-size:11px;display:block;color:#67738a;margin-top:3px}.editor-top{display:flex;justify-content:space-between;align-items:center;gap:10px;margin:19px 0 9px}.editor-top label{font-size:13px;font-weight:800}.editor-top span{font-size:11px;color:#7b879c}.editor{display:block;width:100%;min-height:176px;resize:vertical;background:var(--code);color:#e9f1ff;border:1px solid #263451;border-radius:12px;padding:17px;font-size:13px;line-height:1.8;letter-spacing:.1px;font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;tab-size:2}.editor::placeholder{color:#8696b6}.actions{display:flex;gap:9px;align-items:center;flex-wrap:wrap;margin-top:12px}.primary{background:var(--blue);color:#fff;border:1px solid var(--blue);font-weight:800;padding:11px 17px;border-radius:10px;box-shadow:0 4px 12px rgba(84,72,219,.19)}.primary:hover{background:#3d33c6}.secondary{border:1px solid #d6def0;background:#fff;color:#394c6e;font-weight:700;padding:10px 12px;border-radius:10px;font-size:12px}.secondary:hover{background:#f6f7fc}.keyboard{font-size:11px;color:#7c889b;margin-left:auto}.console-result{margin-top:16px;border-radius:12px;border:1px solid #dee5f1;background:#f8faff;padding:14px;min-height:96px}.console-result.good{background:#effaf6;border-color:#b9ead6}.console-result.bad{background:#fff5f5;border-color:#f0c9cd}.result-title{font-weight:850;font-size:14px;margin-bottom:5px}.good .result-title{color:#07815f}.bad .result-title{color:#bb393d}.result-msg{font-size:13px;white-space:pre-wrap;overflow-wrap:anywhere}.result-hint{font-size:12px;color:#65738e;margin-top:6px}.result-code{display:block;margin-top:9px;font-family:monospace;color:#42536a;font-size:12px}
-.explorer-head{display:flex;align-items:center;gap:8px;flex-wrap:wrap;padding:11px 15px;background:#f9fbff;border-bottom:1px solid var(--line)}.db-icon{height:26px;width:26px;display:inline-grid;place-items:center;background:#e7e5ff;border-radius:7px;color:#5850c5}.db-name{font:800 13px ui-monospace,monospace;color:#354367}.db-meta{margin-left:auto;color:#8390a3;font-size:11px}.tables-bar{padding:14px 16px 11px}.tables-bar-label{font-size:11px;font-weight:800;text-transform:uppercase;color:#8b97a9;letter-spacing:.7px;margin-bottom:9px}.table-list{display:flex;flex-wrap:wrap;gap:8px;min-height:34px}.table-tab{background:#fff;color:#344263;border:1px solid #dce3ee;border-radius:9px;padding:7px 10px;font-size:12px;font-weight:750}.table-tab.selected{background:#eceaff;color:#4135b9;border-color:#8f87ec}.table-tab small{display:inline-block;color:#78879c;margin-left:7px}.empty-tabs{color:#97a3b4;font-size:13px;font-style:italic}.table-detail{padding:14px 16px 17px;min-height:250px}.detail-top{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-bottom:13px}.detail-top h3{margin:0;font-size:15px;overflow-wrap:anywhere}.switch{background:#f2f5fc;padding:3px;border-radius:9px;display:flex;gap:3px}.switch button{border:0;background:transparent;border-radius:7px;padding:6px 11px;font-size:12px;font-weight:750;color:#73819a}.switch button.active{background:#fff;color:#473acc;box-shadow:0 1px 5px #dfe3ee}.table-wrap{overflow:auto;border:1px solid #dfe5ef;border-radius:10px;max-height:360px}table{border-collapse:collapse;min-width:100%;font-size:12px;text-align:left}th{background:#f4f6fb;color:#405170;padding:10px 11px;white-space:nowrap;border-bottom:1px solid #dde5f1}td{padding:10px 11px;color:#3a4862;border-bottom:1px solid #edf0f6;white-space:nowrap}tr:last-child td{border-bottom:0}.type{font-family:ui-monospace,monospace;color:#5546c2;font-size:11px}.null{font-family:monospace;color:#a1aabc;font-style:italic}.pill{display:inline-block;font:700 10px ui-monospace,monospace;background:#edf7f3;color:#188866;padding:3px 6px;border-radius:5px}.no-rows{padding:16px;color:#8e9aab;text-align:center;font-size:13px}.empty-db{text-align:center;padding:28px 14px;color:#748198}.empty-db .illustration{margin:auto auto 12px;border:2px dashed #cdd6e8;border-radius:15px;width:75px;height:70px;display:grid;place-items:center;font-size:30px}.empty-db strong{display:block;color:#4b5b77;margin-bottom:4px}.empty-db p{font-size:12px;max-width:240px;margin:0 auto}.note{font-size:11px;color:#8592a8;padding-top:10px}.lower{display:grid;grid-template-columns:1fr 1fr;gap:18px;margin-top:18px}.lower .panel{padding:20px}.lower h2{font-size:16px;margin:0 0 12px}.guide-steps{display:grid;gap:8px}.step{display:flex;gap:12px;font-size:12px;color:#596780;align-items:flex-start}.step b{background:#eeeaff;color:#4b42c6;display:inline-flex;flex:none;width:25px;height:25px;border-radius:8px;align-items:center;justify-content:center;font-size:12px}.step strong{color:#2a3a56}.log{display:grid;gap:9px;max-height:223px;overflow:auto}.log-item{border-left:3px solid #5a50d9;padding:3px 10px;font-size:12px}.log-item.err{border-left-color:#d15e64}.log-item strong{display:block;color:#30415e}.log-item small{color:#8290a4}.log-empty{font-size:12px;color:#8996a9}.footer{text-align:center;margin-top:20px;font-size:11px;color:#7c8aa1}
-@media(max-width:900px){.layout{grid-template-columns:1fr}.lower{grid-template-columns:1fr 1fr}.container{padding:13px 12px 30px}.hero{padding:23px 21px}.panel-head{padding:15px}.section-in{padding:15px}}
-@media(max-width:540px){.query-buttons{grid-template-columns:repeat(2,minmax(0,1fr))}.lower{grid-template-columns:1fr}.hero h1{font-size:26px}.keyboard{width:100%;margin-left:0}.detail-top{align-items:flex-start;flex-direction:column}.hero-stats{gap:6px}}
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <meta name="color-scheme" content="light">
+  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='14' fill='%235146df'/%3E%3Cellipse cx='32' cy='17' rx='17' ry='7' fill='none' stroke='white' stroke-width='4'/%3E%3Cpath d='M15 17v29c0 4 8 7 17 7s17-3 17-7V17M15 31c0 4 8 7 17 7s17-3 17-7M15 44c0 4 8 7 17 7s17-3 17-7' fill='none' stroke='white' stroke-width='4' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E">
+  <title>SQL Query Simulator — HSC ICT</title>
+  <style>
+    :root {
+      --ink: #14213b;
+      --muted: #66748b;
+      --line: #dde5f1;
+      --bg: #f4f7fc;
+      --blue: #5146df;
+      --blue2: #6e62e8;
+      --mint: #0d906f;
+      --rose: #c64c51;
+      --white: #fff;
+      --code: #141e33;
+      --shadow: 0 10px 34px rgba(25, 40, 84, .07)
+    }
 
-/* Data Type শেখার ল্যাব */
-.datatype-section{margin-top:19px}.datatype-heading{display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:10px;padding:21px 22px 14px}.datatype-heading h2{font-size:21px;margin:0 0 4px;letter-spacing:-.5px}.datatype-heading p{color:var(--muted);font-size:13px;margin:0;max-width:770px}.dtype-body{padding:0 21px 22px}.dtype-notice{font-size:12px;border-radius:10px;padding:10px 12px;margin:0 0 17px;background:#f3f6ff;border:1px solid #e1e8fc;color:#415273}.dtype-filters{display:flex;flex-wrap:wrap;gap:7px;margin-bottom:14px}.dtype-filter{background:#fff;border:1px solid #dfe5f0;border-radius:100px;padding:7px 12px;color:#596880;font-size:12px;font-weight:750}.dtype-filter.active{background:#5146df;border-color:#5146df;color:#fff}.dtype-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:11px}.dtype-card{appearance:none;display:flex;flex-direction:column;align-items:stretch;text-align:left;width:100%;min-height:171px;background:#fcfdff;border:1px solid #e0e6f1;border-radius:13px;padding:13px;gap:8px;color:inherit;transition:.15s}.dtype-card:hover{border-color:#8276e8;background:#f9f8ff;transform:translateY(-1px)}.dtype-card.selected{border-color:#6b5fdf;background:#f4f2ff;box-shadow:0 0 0 1px #9c92f0}.dtype-top{display:flex;gap:9px;align-items:center;justify-content:space-between;flex-wrap:wrap}.dtype-title{font-size:13px;color:#4738af;font-family:ui-monospace,SFMono-Regular,Menlo,monospace;font-weight:850}.dtype-kind{color:#74839a;font-size:10px;font-weight:800;border-radius:30px;background:#eef2f8;padding:3px 7px}.dtype-descr{font-size:12px;color:#53627c;line-height:1.5;min-height:37px}.dtype-sample{display:flex;flex-wrap:wrap;gap:6px;align-items:baseline;font-size:11px}.dtype-sample em{font-style:normal;color:#158060;font-size:11px;font-weight:850;white-space:nowrap}.dtype-sample.invalid em{color:#bd454d}.dtype-sample code{font-size:11px;background:#edf6f1;color:#19785c;padding:3px 6px;border-radius:5px;overflow-wrap:anywhere;word-break:break-word;white-space:normal}.dtype-sample.invalid code{background:#fef0f0;color:#b7444c}.dtype-bottom{margin-top:auto;font-size:11px;font-weight:800;color:#5347c8}.dtype-workbench{display:grid;grid-template-columns:minmax(0,.95fr) minmax(0,1.05fr);gap:15px;margin-top:18px}.dtype-checker,.dtype-explain{border:1px solid #dfe6f2;border-radius:14px;padding:16px;background:#fbfcff}.dtype-checker h3,.dtype-explain h3{font-size:15px;margin:0 0 7px}.dtype-mini{font-size:12px;color:#65748b;margin:0 0 12px}.dtype-input-row{display:grid;grid-template-columns:1fr 1fr;gap:10px}.dtype-input-row label{display:block;font-size:12px;color:#4d5e78;font-weight:750}.dtype-input-row input{width:100%;display:block;margin-top:5px;border:1px solid #d6dfec;border-radius:9px;background:#fff;padding:10px;color:#263650;font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;font-size:13px;min-width:0}.dtype-actions{display:flex;gap:7px;margin-top:12px;flex-wrap:wrap}.dtype-actions .secondary{padding:9px 10px}.dtype-actions .primary{padding:9px 12px;font-size:12px;box-shadow:none}.dtype-check-result{border:1px dashed #cbd6e7;border-radius:10px;padding:12px;margin-top:12px;background:#fff;min-height:73px;font-size:12px;color:#55647d}.dtype-check-result.ok{background:#effaf6;border-color:#a4dbc7;color:#146e54}.dtype-check-result.error{background:#fff5f5;border-color:#eebdc0;color:#a93341}.dtype-check-result strong{display:block;font-size:13px;margin-bottom:3px}.dtype-check-result p{margin:0;overflow-wrap:anywhere}.dtype-explain h3{margin-bottom:4px}.dtype-explain .dtype-example-block{background:#18233d;color:#e8f0ff;white-space:pre-wrap;overflow-wrap:anywhere;padding:14px;border-radius:11px;font:12px/1.65 ui-monospace,Menlo,Consolas,monospace;margin:12px 0}.dtype-explain .dtype-foot{font-size:12px;color:#66758e;margin:7px 0 0}.dtype-explain .secondary{font-size:12px}.dtype-inline-link{color:#4335c4;text-decoration:none;font-weight:800}.dtype-inline-link:hover{text-decoration:underline}.type-inspect{color:#5044b6;background:#f4f2ff;border:1px solid #e2dfff;border-radius:6px;padding:4px 7px;font:750 11px ui-monospace,monospace;cursor:pointer}.type-inspect:hover{background:#e6e0ff}.dtype-footnote{color:#758198;font-size:11px;margin:13px 2px 0}
-@media(max-width:980px){.dtype-grid{grid-template-columns:repeat(2,minmax(0,1fr))}}@media(max-width:700px){.dtype-workbench{grid-template-columns:1fr}.dtype-heading{padding:18px 15px 11px}.dtype-body{padding:0 14px 17px}.dtype-grid{grid-template-columns:repeat(2,minmax(0,1fr))}.dtype-card{padding:11px;min-height:182px}}@media(max-width:440px){.dtype-grid{grid-template-columns:1fr}.dtype-card{min-height:0}.dtype-descr{min-height:0}.dtype-input-row{grid-template-columns:1fr}.dtype-checker,.dtype-explain{padding:13px}}
+    * {
+      box-sizing: border-box
+    }
 
-/* 2026 UI improvement: data type cards and live checker share the same row. */
-.datatype-section{overflow:visible}
-.dtype-learning-layout{display:grid;grid-template-columns:minmax(0,1.4fr) minmax(340px,.85fr);gap:18px;align-items:start}
-.dtype-guide-pane{min-width:0}
-.dtype-pane-title{display:flex;align-items:baseline;justify-content:space-between;flex-wrap:wrap;gap:4px 10px;margin:0 0 11px}
-.dtype-pane-title strong{font-size:14px;color:#27365a}
-.dtype-pane-title span{font-size:11px;color:#697795}
-.dtype-guide-pane .dtype-grid{grid-template-columns:repeat(2,minmax(0,1fr))}
-.dtype-workbench{display:flex;flex-direction:column;gap:12px;margin-top:0;min-width:0;position:sticky;top:16px}
-.dtype-checker{background:linear-gradient(180deg,#f7f6ff 0%,#fff 55%);border-color:#d2cdf8;box-shadow:0 8px 26px rgba(71,56,156,.07)}
-.dtype-checker-top{display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:7px;margin-bottom:8px}
-.dtype-checker-top h3{margin:0}
-.dtype-live-chip{font:800 10px ui-sans-serif,-apple-system,'Segoe UI',sans-serif;letter-spacing:.25px;color:#127f60;background:#e7f7f1;border:1px solid #c2e9db;padding:4px 8px;border-radius:99px;white-space:nowrap}
-.dtype-checker .dtype-input-row{grid-template-columns:minmax(0,1fr) minmax(0,1fr)}
-.dtype-checker .dtype-actions{gap:7px}
-.dtype-checker .dtype-check-result{border-style:solid;min-height:85px}
-.dtype-check-result strong{font-size:14px}
-.dtype-explain{padding:0;overflow:hidden;background:#fff}
-.dtype-explain summary{cursor:pointer;list-style:none;padding:12px 15px;font-weight:800;font-size:13px;color:#3d4b68;display:flex;align-items:center;justify-content:space-between;gap:9px}
-.dtype-explain summary::-webkit-details-marker{display:none}
-.dtype-explain summary span{font-size:11px;font-weight:750;color:#5a4dd0}
-.dtype-explain[open] summary{border-bottom:1px solid #e6e9f2}
-.dtype-explain summary .dtype-code-toggle::after{content:"⌄";display:inline-block;margin-left:6px;transition:transform .18s ease;transform-origin:center}.dtype-explain[open] summary .dtype-code-toggle::after{transform:rotate(180deg)}
-.dtype-explain-inner{padding:13px 15px 15px}
-.dtype-explain .dtype-example-block{margin:8px 0 11px;max-height:210px;overflow:auto}
-.dtype-card-result{display:none}
-@media(min-width:1180px){.dtype-guide-pane .dtype-grid{grid-template-columns:repeat(3,minmax(0,1fr))}}
-@media(max-width:1050px){
- .dtype-learning-layout{grid-template-columns:minmax(0,1fr) minmax(305px,.9fr);gap:13px}
- .dtype-checker .dtype-input-row{grid-template-columns:1fr}
- .dtype-checker .dtype-actions .primary{width:100%}
-}
-@media(max-width:760px){
- .dtype-learning-layout{grid-template-columns:minmax(0,1fr)}
- .dtype-workbench{order:0;position:static}
- .dtype-guide-pane{order:1}
- .dtype-checker .dtype-input-row{grid-template-columns:repeat(2,minmax(0,1fr))}
- .dtype-checker .dtype-actions .primary{width:auto}
- .dtype-guide-pane .dtype-grid{grid-template-columns:repeat(2,minmax(0,1fr))}
- .dtype-pane-title{margin-top:7px}
- .dtype-card.selected .dtype-card-result{display:block;background:#e7f7f1;color:#116b50;padding:8px;border-radius:8px;font-size:11px;font-weight:700;line-height:1.6}
- .dtype-card.selected .dtype-card-result code{color:#086b4d}
-}
-@media(max-width:510px){
- .dtype-checker .dtype-input-row{grid-template-columns:1fr}
- .dtype-guide-pane .dtype-grid{grid-template-columns:1fr}
- .dtype-guide-pane .dtype-card{min-height:0}
- .dtype-guide-pane .dtype-card .dtype-descr{min-height:0}
-}
-</style>
+    html {
+      scroll-behavior: smooth
+    }
+
+    body {
+      margin: 0;
+      background: var(--bg);
+      color: var(--ink);
+      font-family: ui-sans-serif, -apple-system, BlinkMacSystemFont, "Noto Sans Bengali", "Hind Siliguri", "Segoe UI", sans-serif;
+      line-height: 1.55
+    }
+
+    button,
+    textarea {
+      font: inherit
+    }
+
+    button {
+      cursor: pointer
+    }
+
+    button:focus-visible,
+    textarea:focus-visible {
+      outline: 3px solid #a5a1ff;
+      outline-offset: 3px
+    }
+
+    .container {
+      max-width: 1330px;
+      margin: auto;
+      padding: 24px 22px 46px
+    }
+
+    .hero {
+      border-radius: 22px;
+      background: linear-gradient(112deg, #17264b 0%, #322c79 52%, #544bc4 100%);
+      padding: 29px 32px;
+      color: #fff;
+      position: relative;
+      overflow: hidden;
+      box-shadow: 0 12px 32px rgba(34, 37, 107, .15)
+    }
+
+    .hero:before {
+      content: '';
+      position: absolute;
+      width: 250px;
+      height: 250px;
+      right: -40px;
+      top: -105px;
+      border: 1px solid rgba(255, 255, 255, .18);
+      border-radius: 50%;
+      box-shadow: 0 0 0 50px rgba(255, 255, 255, .035), 0 0 0 110px rgba(255, 255, 255, .025)
+    }
+
+    .eyebrow {
+      display: inline-flex;
+      align-items: center;
+      gap: 9px;
+      background: rgba(255, 255, 255, .13);
+      border: 1px solid rgba(255, 255, 255, .2);
+      border-radius: 100px;
+      padding: 5px 11px;
+      font-size: 12px;
+      letter-spacing: .9px;
+      font-weight: 800
+    }
+
+    .dot {
+      width: 7px;
+      height: 7px;
+      border-radius: 50%;
+      background: #4ce3ae;
+      display: inline-block
+    }
+
+    .hero h1 {
+      font-size: clamp(27px, 4vw, 39px);
+      line-height: 1.24;
+      margin: 13px 0 5px;
+      letter-spacing: -.8px
+    }
+
+    .hero p {
+      max-width: 770px;
+      opacity: .88;
+      font-size: 14px;
+      margin: 0
+    }
+
+    .hero-stats {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 9px;
+      margin-top: 20px
+    }
+
+    .hero-stats span {
+      padding: 7px 12px;
+      border-radius: 9px;
+      border: 1px solid rgba(255, 255, 255, .19);
+      background: rgba(255, 255, 255, .09);
+      font-size: 13px
+    }
+
+    .hero-stats strong {
+      font-size: 15px;
+      margin-right: 4px
+    }
+
+    .tip {
+      background: #edf0ff;
+      color: #443ca7;
+      border: 1px solid #d9ddff;
+      border-radius: 12px;
+      padding: 11px 14px;
+      font-size: 13px;
+      margin: 16px 0 18px
+    }
+
+    .layout {
+      display: grid;
+      grid-template-columns: minmax(0, 1.05fr) minmax(0, 1fr);
+      gap: 18px;
+      align-items: start
+    }
+
+    .panel {
+      background: #fff;
+      border: 1px solid var(--line);
+      box-shadow: var(--shadow);
+      border-radius: 18px;
+      overflow: hidden
+    }
+
+    .panel-head {
+      padding: 18px 21px 14px;
+      border-bottom: 1px solid #eff2f8;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 10px
+    }
+
+    .panel-title {
+      margin: 0;
+      font-size: 18px;
+      letter-spacing: -.3px
+    }
+
+    .panel-sub {
+      color: var(--muted);
+      font-size: 12px;
+      margin: 3px 0 0
+    }
+
+    .badge {
+      font-size: 11px;
+      background: #f0efff;
+      color: #4b41c7;
+      border-radius: 50px;
+      padding: 5px 10px;
+      font-weight: 800;
+      white-space: nowrap
+    }
+
+    .section-in {
+      padding: 18px 20px
+    }
+
+    .guide-label {
+      font-size: 12px;
+      font-weight: 800;
+      color: #65748e;
+      margin-bottom: 10px;
+      display: block
+    }
+
+    .query-buttons {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 8px
+    }
+
+    .query-chip {
+      border: 1px solid var(--line);
+      border-radius: 10px;
+      background: #f9faff;
+      text-align: left;
+      padding: 11px 11px;
+      min-height: 69px;
+      transition: background .15s, border-color .15s
+    }
+
+    .query-chip:hover {
+      border-color: #b1aaff;
+      background: #f1efff
+    }
+
+    .query-chip.active {
+      background: #efedff;
+      border-color: #8276eb;
+      box-shadow: inset 0 0 0 1px #8276eb
+    }
+
+    .query-chip .chip-name {
+      font: 800 12px ui-monospace, Menlo, Consolas, monospace;
+      display: block;
+      color: #554bca
+    }
+
+    .query-chip .chip-desc {
+      font-size: 11px;
+      display: block;
+      color: #67738a;
+      margin-top: 3px
+    }
+
+    .editor-top {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 10px;
+      margin: 19px 0 9px
+    }
+
+    .editor-top label {
+      font-size: 13px;
+      font-weight: 800
+    }
+
+    .editor-top span {
+      font-size: 11px;
+      color: #7b879c
+    }
+
+    .editor {
+      display: block;
+      width: 100%;
+      min-height: 176px;
+      resize: vertical;
+      background: var(--code);
+      color: #e9f1ff;
+      border: 1px solid #263451;
+      border-radius: 12px;
+      padding: 17px;
+      font-size: 13px;
+      line-height: 1.8;
+      letter-spacing: .1px;
+      font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+      tab-size: 2
+    }
+
+    .editor::placeholder {
+      color: #8696b6
+    }
+
+    .actions {
+      display: flex;
+      gap: 9px;
+      align-items: center;
+      flex-wrap: wrap;
+      margin-top: 12px
+    }
+
+    .primary {
+      background: var(--blue);
+      color: #fff;
+      border: 1px solid var(--blue);
+      font-weight: 800;
+      padding: 11px 17px;
+      border-radius: 10px;
+      box-shadow: 0 4px 12px rgba(84, 72, 219, .19)
+    }
+
+    .primary:hover {
+      background: #3d33c6
+    }
+
+    .secondary {
+      border: 1px solid #d6def0;
+      background: #fff;
+      color: #394c6e;
+      font-weight: 700;
+      padding: 10px 12px;
+      border-radius: 10px;
+      font-size: 12px
+    }
+
+    .secondary:hover {
+      background: #f6f7fc
+    }
+
+    .keyboard {
+      font-size: 11px;
+      color: #7c889b;
+      margin-left: auto
+    }
+
+    .console-result {
+      margin-top: 16px;
+      border-radius: 12px;
+      border: 1px solid #dee5f1;
+      background: #f8faff;
+      padding: 14px;
+      min-height: 96px
+    }
+
+    .console-result.good {
+      background: #effaf6;
+      border-color: #b9ead6
+    }
+
+    .console-result.bad {
+      background: #fff5f5;
+      border-color: #f0c9cd
+    }
+
+    .result-title {
+      font-weight: 850;
+      font-size: 14px;
+      margin-bottom: 5px
+    }
+
+    .good .result-title {
+      color: #07815f
+    }
+
+    .bad .result-title {
+      color: #bb393d
+    }
+
+    .result-msg {
+      font-size: 13px;
+      white-space: pre-wrap;
+      overflow-wrap: anywhere
+    }
+
+    .result-hint {
+      font-size: 12px;
+      color: #65738e;
+      margin-top: 6px
+    }
+
+    .result-code {
+      display: block;
+      margin-top: 9px;
+      font-family: monospace;
+      color: #42536a;
+      font-size: 12px
+    }
+
+    .explorer-head {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      flex-wrap: wrap;
+      padding: 11px 15px;
+      background: #f9fbff;
+      border-bottom: 1px solid var(--line)
+    }
+
+    .db-icon {
+      height: 26px;
+      width: 26px;
+      display: inline-grid;
+      place-items: center;
+      background: #e7e5ff;
+      border-radius: 7px;
+      color: #5850c5
+    }
+
+    .db-name {
+      font: 800 13px ui-monospace, monospace;
+      color: #354367
+    }
+
+    .db-meta {
+      margin-left: auto;
+      color: #8390a3;
+      font-size: 11px
+    }
+
+    .tables-bar {
+      padding: 14px 16px 11px
+    }
+
+    .tables-bar-label {
+      font-size: 11px;
+      font-weight: 800;
+      text-transform: uppercase;
+      color: #8b97a9;
+      letter-spacing: .7px;
+      margin-bottom: 9px
+    }
+
+    .table-list {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      min-height: 34px
+    }
+
+    .table-tab {
+      background: #fff;
+      color: #344263;
+      border: 1px solid #dce3ee;
+      border-radius: 9px;
+      padding: 7px 10px;
+      font-size: 12px;
+      font-weight: 750
+    }
+
+    .table-tab.selected {
+      background: #eceaff;
+      color: #4135b9;
+      border-color: #8f87ec
+    }
+
+    .table-tab small {
+      display: inline-block;
+      color: #78879c;
+      margin-left: 7px
+    }
+
+    .empty-tabs {
+      color: #97a3b4;
+      font-size: 13px;
+      font-style: italic
+    }
+
+    .table-detail {
+      padding: 14px 16px 17px;
+      min-height: 250px
+    }
+
+    .detail-top {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      margin-bottom: 13px
+    }
+
+    .detail-top h3 {
+      margin: 0;
+      font-size: 15px;
+      overflow-wrap: anywhere
+    }
+
+    .switch {
+      background: #f2f5fc;
+      padding: 3px;
+      border-radius: 9px;
+      display: flex;
+      gap: 3px
+    }
+
+    .switch button {
+      border: 0;
+      background: transparent;
+      border-radius: 7px;
+      padding: 6px 11px;
+      font-size: 12px;
+      font-weight: 750;
+      color: #73819a
+    }
+
+    .switch button.active {
+      background: #fff;
+      color: #473acc;
+      box-shadow: 0 1px 5px #dfe3ee
+    }
+
+    .table-wrap {
+      overflow: auto;
+      border: 1px solid #dfe5ef;
+      border-radius: 10px;
+      max-height: 360px
+    }
+
+    table {
+      border-collapse: collapse;
+      min-width: 100%;
+      font-size: 12px;
+      text-align: left
+    }
+
+    th {
+      background: #f4f6fb;
+      color: #405170;
+      padding: 10px 11px;
+      white-space: nowrap;
+      border-bottom: 1px solid #dde5f1
+    }
+
+    td {
+      padding: 10px 11px;
+      color: #3a4862;
+      border-bottom: 1px solid #edf0f6;
+      white-space: nowrap
+    }
+
+    tr:last-child td {
+      border-bottom: 0
+    }
+
+    .type {
+      font-family: ui-monospace, monospace;
+      color: #5546c2;
+      font-size: 11px
+    }
+
+    .null {
+      font-family: monospace;
+      color: #a1aabc;
+      font-style: italic
+    }
+
+    .pill {
+      display: inline-block;
+      font: 700 10px ui-monospace, monospace;
+      background: #edf7f3;
+      color: #188866;
+      padding: 3px 6px;
+      border-radius: 5px
+    }
+
+    .no-rows {
+      padding: 16px;
+      color: #8e9aab;
+      text-align: center;
+      font-size: 13px
+    }
+
+    .empty-db {
+      text-align: center;
+      padding: 28px 14px;
+      color: #748198
+    }
+
+    .empty-db .illustration {
+      margin: auto auto 12px;
+      border: 2px dashed #cdd6e8;
+      border-radius: 15px;
+      width: 75px;
+      height: 70px;
+      display: grid;
+      place-items: center;
+      font-size: 30px
+    }
+
+    .empty-db strong {
+      display: block;
+      color: #4b5b77;
+      margin-bottom: 4px
+    }
+
+    .empty-db p {
+      font-size: 12px;
+      max-width: 240px;
+      margin: 0 auto
+    }
+
+    .note {
+      font-size: 11px;
+      color: #8592a8;
+      padding-top: 10px
+    }
+
+    .lower {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 18px;
+      margin-top: 18px
+    }
+
+    .lower .panel {
+      padding: 20px
+    }
+
+    .lower h2 {
+      font-size: 16px;
+      margin: 0 0 12px
+    }
+
+    .guide-steps {
+      display: grid;
+      gap: 8px
+    }
+
+    .step {
+      display: flex;
+      gap: 12px;
+      font-size: 12px;
+      color: #596780;
+      align-items: flex-start
+    }
+
+    .step b {
+      background: #eeeaff;
+      color: #4b42c6;
+      display: inline-flex;
+      flex: none;
+      width: 25px;
+      height: 25px;
+      border-radius: 8px;
+      align-items: center;
+      justify-content: center;
+      font-size: 12px
+    }
+
+    .step strong {
+      color: #2a3a56
+    }
+
+    .log {
+      display: grid;
+      gap: 9px;
+      max-height: 223px;
+      overflow: auto
+    }
+
+    .log-item {
+      border-left: 3px solid #5a50d9;
+      padding: 3px 10px;
+      font-size: 12px
+    }
+
+    .log-item.err {
+      border-left-color: #d15e64
+    }
+
+    .log-item strong {
+      display: block;
+      color: #30415e
+    }
+
+    .log-item small {
+      color: #8290a4
+    }
+
+    .log-empty {
+      font-size: 12px;
+      color: #8996a9
+    }
+
+    .footer {
+      text-align: center;
+      margin-top: 20px;
+      font-size: 11px;
+      color: #7c8aa1
+    }
+
+    @media(max-width:900px) {
+      .layout {
+        grid-template-columns: 1fr
+      }
+
+      .lower {
+        grid-template-columns: 1fr 1fr
+      }
+
+      .container {
+        padding: 13px 12px 30px
+      }
+
+      .hero {
+        padding: 23px 21px
+      }
+
+      .panel-head {
+        padding: 15px
+      }
+
+      .section-in {
+        padding: 15px
+      }
+    }
+
+    @media(max-width:540px) {
+      .query-buttons {
+        grid-template-columns: repeat(2, minmax(0, 1fr))
+      }
+
+      .lower {
+        grid-template-columns: 1fr
+      }
+
+      .hero h1 {
+        font-size: 26px
+      }
+
+      .keyboard {
+        width: 100%;
+        margin-left: 0
+      }
+
+      .detail-top {
+        align-items: flex-start;
+        flex-direction: column
+      }
+
+      .hero-stats {
+        gap: 6px
+      }
+    }
+
+    /* Data Type শেখার ল্যাব */
+    .datatype-section {
+      margin-top: 19px
+    }
+
+    .datatype-heading {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 10px;
+      padding: 21px 22px 14px
+    }
+
+    .datatype-heading h2 {
+      font-size: 21px;
+      margin: 0 0 4px;
+      letter-spacing: -.5px
+    }
+
+    .datatype-heading p {
+      color: var(--muted);
+      font-size: 13px;
+      margin: 0;
+      max-width: 770px
+    }
+
+    .dtype-body {
+      padding: 0 21px 22px
+    }
+
+    .dtype-notice {
+      font-size: 12px;
+      border-radius: 10px;
+      padding: 10px 12px;
+      margin: 0 0 17px;
+      background: #f3f6ff;
+      border: 1px solid #e1e8fc;
+      color: #415273
+    }
+
+    .dtype-filters {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 7px;
+      margin-bottom: 14px
+    }
+
+    .dtype-filter {
+      background: #fff;
+      border: 1px solid #dfe5f0;
+      border-radius: 100px;
+      padding: 7px 12px;
+      color: #596880;
+      font-size: 12px;
+      font-weight: 750
+    }
+
+    .dtype-filter.active {
+      background: #5146df;
+      border-color: #5146df;
+      color: #fff
+    }
+
+    .dtype-grid {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 11px
+    }
+
+    .dtype-card {
+      appearance: none;
+      display: flex;
+      flex-direction: column;
+      align-items: stretch;
+      text-align: left;
+      width: 100%;
+      min-height: 171px;
+      background: #fcfdff;
+      border: 1px solid #e0e6f1;
+      border-radius: 13px;
+      padding: 13px;
+      gap: 8px;
+      color: inherit;
+      transition: .15s
+    }
+
+    .dtype-card:hover {
+      border-color: #8276e8;
+      background: #f9f8ff;
+      transform: translateY(-1px)
+    }
+
+    .dtype-card.selected {
+      border-color: #6b5fdf;
+      background: #f4f2ff;
+      box-shadow: 0 0 0 1px #9c92f0
+    }
+
+    .dtype-top {
+      display: flex;
+      gap: 9px;
+      align-items: center;
+      justify-content: space-between;
+      flex-wrap: wrap
+    }
+
+    .dtype-title {
+      font-size: 13px;
+      color: #4738af;
+      font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+      font-weight: 850
+    }
+
+    .dtype-kind {
+      color: #74839a;
+      font-size: 10px;
+      font-weight: 800;
+      border-radius: 30px;
+      background: #eef2f8;
+      padding: 3px 7px
+    }
+
+    .dtype-descr {
+      font-size: 12px;
+      color: #53627c;
+      line-height: 1.5;
+      min-height: 37px
+    }
+
+    .dtype-sample {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+      align-items: baseline;
+      font-size: 11px
+    }
+
+    .dtype-sample em {
+      font-style: normal;
+      color: #158060;
+      font-size: 11px;
+      font-weight: 850;
+      white-space: nowrap
+    }
+
+    .dtype-sample.invalid em {
+      color: #bd454d
+    }
+
+    .dtype-sample code {
+      font-size: 11px;
+      background: #edf6f1;
+      color: #19785c;
+      padding: 3px 6px;
+      border-radius: 5px;
+      overflow-wrap: anywhere;
+      word-break: break-word;
+      white-space: normal
+    }
+
+    .dtype-sample.invalid code {
+      background: #fef0f0;
+      color: #b7444c
+    }
+
+    .dtype-bottom {
+      margin-top: auto;
+      font-size: 11px;
+      font-weight: 800;
+      color: #5347c8
+    }
+
+    .dtype-workbench {
+      display: grid;
+      grid-template-columns: minmax(0, .95fr) minmax(0, 1.05fr);
+      gap: 15px;
+      margin-top: 18px
+    }
+
+    .dtype-checker,
+    .dtype-explain {
+      border: 1px solid #dfe6f2;
+      border-radius: 14px;
+      padding: 16px;
+      background: #fbfcff
+    }
+
+    .dtype-checker h3,
+    .dtype-explain h3 {
+      font-size: 15px;
+      margin: 0 0 7px
+    }
+
+    .dtype-mini {
+      font-size: 12px;
+      color: #65748b;
+      margin: 0 0 12px
+    }
+
+    .dtype-input-row {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 10px
+    }
+
+    .dtype-input-row label {
+      display: block;
+      font-size: 12px;
+      color: #4d5e78;
+      font-weight: 750
+    }
+
+    .dtype-input-row input {
+      width: 100%;
+      display: block;
+      margin-top: 5px;
+      border: 1px solid #d6dfec;
+      border-radius: 9px;
+      background: #fff;
+      padding: 10px;
+      color: #263650;
+      font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+      font-size: 13px;
+      min-width: 0
+    }
+
+    .dtype-actions {
+      display: flex;
+      gap: 7px;
+      margin-top: 12px;
+      flex-wrap: wrap
+    }
+
+    .dtype-actions .secondary {
+      padding: 9px 10px
+    }
+
+    .dtype-actions .primary {
+      padding: 9px 12px;
+      font-size: 12px;
+      box-shadow: none
+    }
+
+    .dtype-check-result {
+      border: 1px dashed #cbd6e7;
+      border-radius: 10px;
+      padding: 12px;
+      margin-top: 12px;
+      background: #fff;
+      min-height: 73px;
+      font-size: 12px;
+      color: #55647d
+    }
+
+    .dtype-check-result.ok {
+      background: #effaf6;
+      border-color: #a4dbc7;
+      color: #146e54
+    }
+
+    .dtype-check-result.error {
+      background: #fff5f5;
+      border-color: #eebdc0;
+      color: #a93341
+    }
+
+    .dtype-check-result strong {
+      display: block;
+      font-size: 13px;
+      margin-bottom: 3px
+    }
+
+    .dtype-check-result p {
+      margin: 0;
+      overflow-wrap: anywhere
+    }
+
+    .dtype-explain h3 {
+      margin-bottom: 4px
+    }
+
+    .dtype-explain .dtype-example-block {
+      background: #18233d;
+      color: #e8f0ff;
+      white-space: pre-wrap;
+      overflow-wrap: anywhere;
+      padding: 14px;
+      border-radius: 11px;
+      font: 12px/1.65 ui-monospace, Menlo, Consolas, monospace;
+      margin: 12px 0
+    }
+
+    .dtype-explain .dtype-foot {
+      font-size: 12px;
+      color: #66758e;
+      margin: 7px 0 0
+    }
+
+    .dtype-explain .secondary {
+      font-size: 12px
+    }
+
+    .dtype-inline-link {
+      color: #4335c4;
+      text-decoration: none;
+      font-weight: 800
+    }
+
+    .dtype-inline-link:hover {
+      text-decoration: underline
+    }
+
+    .type-inspect {
+      color: #5044b6;
+      background: #f4f2ff;
+      border: 1px solid #e2dfff;
+      border-radius: 6px;
+      padding: 4px 7px;
+      font: 750 11px ui-monospace, monospace;
+      cursor: pointer
+    }
+
+    .type-inspect:hover {
+      background: #e6e0ff
+    }
+
+    .dtype-footnote {
+      color: #758198;
+      font-size: 11px;
+      margin: 13px 2px 0
+    }
+
+    @media(max-width:980px) {
+      .dtype-grid {
+        grid-template-columns: repeat(2, minmax(0, 1fr))
+      }
+    }
+
+    @media(max-width:700px) {
+      .dtype-workbench {
+        grid-template-columns: 1fr
+      }
+
+      .dtype-heading {
+        padding: 18px 15px 11px
+      }
+
+      .dtype-body {
+        padding: 0 14px 17px
+      }
+
+      .dtype-grid {
+        grid-template-columns: repeat(2, minmax(0, 1fr))
+      }
+
+      .dtype-card {
+        padding: 11px;
+        min-height: 182px
+      }
+    }
+
+    @media(max-width:440px) {
+      .dtype-grid {
+        grid-template-columns: 1fr
+      }
+
+      .dtype-card {
+        min-height: 0
+      }
+
+      .dtype-descr {
+        min-height: 0
+      }
+
+      .dtype-input-row {
+        grid-template-columns: 1fr
+      }
+
+      .dtype-checker,
+      .dtype-explain {
+        padding: 13px
+      }
+    }
+
+    /* 2026 UI improvement: data type cards and live checker share the same row. */
+    .datatype-section {
+      overflow: visible
+    }
+
+    .dtype-learning-layout {
+      display: grid;
+      grid-template-columns: minmax(0, 1.4fr) minmax(340px, .85fr);
+      gap: 18px;
+      align-items: start
+    }
+
+    .dtype-guide-pane {
+      min-width: 0
+    }
+
+    .dtype-pane-title {
+      display: flex;
+      align-items: baseline;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 4px 10px;
+      margin: 0 0 11px
+    }
+
+    .dtype-pane-title strong {
+      font-size: 14px;
+      color: #27365a
+    }
+
+    .dtype-pane-title span {
+      font-size: 11px;
+      color: #697795
+    }
+
+    .dtype-guide-pane .dtype-grid {
+      grid-template-columns: repeat(2, minmax(0, 1fr))
+    }
+
+    .dtype-workbench {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      margin-top: 0;
+      min-width: 0;
+      position: sticky;
+      top: 16px
+    }
+
+    .dtype-checker {
+      background: linear-gradient(180deg, #f7f6ff 0%, #fff 55%);
+      border-color: #d2cdf8;
+      box-shadow: 0 8px 26px rgba(71, 56, 156, .07)
+    }
+
+    .dtype-checker-top {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 7px;
+      margin-bottom: 8px
+    }
+
+    .dtype-checker-top h3 {
+      margin: 0
+    }
+
+    .dtype-live-chip {
+      font: 800 10px ui-sans-serif, -apple-system, 'Segoe UI', sans-serif;
+      letter-spacing: .25px;
+      color: #127f60;
+      background: #e7f7f1;
+      border: 1px solid #c2e9db;
+      padding: 4px 8px;
+      border-radius: 99px;
+      white-space: nowrap
+    }
+
+    .dtype-checker .dtype-input-row {
+      grid-template-columns: minmax(0, 1fr) minmax(0, 1fr)
+    }
+
+    .dtype-checker .dtype-actions {
+      gap: 7px
+    }
+
+    .dtype-checker .dtype-check-result {
+      border-style: solid;
+      min-height: 85px
+    }
+
+    .dtype-check-result strong {
+      font-size: 14px
+    }
+
+    .dtype-explain {
+      padding: 0;
+      overflow: hidden;
+      background: #fff
+    }
+
+    .dtype-explain summary {
+      cursor: pointer;
+      list-style: none;
+      padding: 12px 15px;
+      font-weight: 800;
+      font-size: 13px;
+      color: #3d4b68;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 9px
+    }
+
+    .dtype-explain summary::-webkit-details-marker {
+      display: none
+    }
+
+    .dtype-explain summary span {
+      font-size: 11px;
+      font-weight: 750;
+      color: #5a4dd0
+    }
+
+    .dtype-explain[open] summary {
+      border-bottom: 1px solid #e6e9f2
+    }
+
+    .dtype-explain summary .dtype-code-toggle::after {
+      content: "⌄";
+      display: inline-block;
+      margin-left: 6px;
+      transition: transform .18s ease;
+      transform-origin: center
+    }
+
+    .dtype-explain[open] summary .dtype-code-toggle::after {
+      transform: rotate(180deg)
+    }
+
+    .dtype-explain-inner {
+      padding: 13px 15px 15px
+    }
+
+    .dtype-explain .dtype-example-block {
+      margin: 8px 0 11px;
+      max-height: 210px;
+      overflow: auto
+    }
+
+    .dtype-card-result {
+      display: none
+    }
+
+    @media(min-width:1180px) {
+      .dtype-guide-pane .dtype-grid {
+        grid-template-columns: repeat(3, minmax(0, 1fr))
+      }
+    }
+
+    @media(max-width:1050px) {
+      .dtype-learning-layout {
+        grid-template-columns: minmax(0, 1fr) minmax(305px, .9fr);
+        gap: 13px
+      }
+
+      .dtype-checker .dtype-input-row {
+        grid-template-columns: 1fr
+      }
+
+      .dtype-checker .dtype-actions .primary {
+        width: 100%
+      }
+    }
+
+    @media(max-width:760px) {
+      .dtype-learning-layout {
+        grid-template-columns: minmax(0, 1fr)
+      }
+
+      .dtype-workbench {
+        order: 0;
+        position: static
+      }
+
+      .dtype-guide-pane {
+        order: 1
+      }
+
+      .dtype-checker .dtype-input-row {
+        grid-template-columns: repeat(2, minmax(0, 1fr))
+      }
+
+      .dtype-checker .dtype-actions .primary {
+        width: auto
+      }
+
+      .dtype-guide-pane .dtype-grid {
+        grid-template-columns: repeat(2, minmax(0, 1fr))
+      }
+
+      .dtype-pane-title {
+        margin-top: 7px
+      }
+
+      .dtype-card.selected .dtype-card-result {
+        display: block;
+        background: #e7f7f1;
+        color: #116b50;
+        padding: 8px;
+        border-radius: 8px;
+        font-size: 11px;
+        font-weight: 700;
+        line-height: 1.6
+      }
+
+      .dtype-card.selected .dtype-card-result code {
+        color: #086b4d
+      }
+    }
+
+    @media(max-width:510px) {
+      .dtype-checker .dtype-input-row {
+        grid-template-columns: 1fr
+      }
+
+      .dtype-guide-pane .dtype-grid {
+        grid-template-columns: 1fr
+      }
+
+      .dtype-guide-pane .dtype-card {
+        min-height: 0
+      }
+
+      .dtype-guide-pane .dtype-card .dtype-descr {
+        min-height: 0
+      }
+    }
+  </style>
 </head>
-<body>
-<main class="container" id="sqlApp">
-  <header class="hero">
-    <span class="eyebrow"><i class="dot"></i> HSC ICT · CHAPTER 06 · LIVE PRACTICE</span>
-    <h1>SQL Query Simulator</h1>
-    <p>বাংলায় SQL শেখার প্র্যাকটিস ল্যাব। নিজের Query লিখে Run করো—কোন টেবিল তৈরি হলো, রেকর্ড বদলালো, কিংবা কোথায় ভুল হলো, সব দেখতে পাবে।</p>
-    <div class="hero-stats"><span><strong id="stat-tables">0</strong> টেবিল</span><span><strong id="stat-rows">0</strong> মোট রেকর্ড</span><span>৬টি প্রধান কমান্ড</span><span>🔒 ব্রাউজারেই সিমুলেশন</span></div>
-  </header>
-  <div class="tip">💡 <strong>শুরু করার নিয়ম:</strong> প্রথমে <b>CREATE</b> বেছে Run করো, তারপর <b>INSERT</b>। পরের কমান্ডগুলো একে একে চেষ্টা করো। চাইলে নিজের মতো SQL লিখতে পারো। &nbsp;<a class="dtype-inline-link" href="#datatype-academy">🧩 Data Type-ও শিখো ↓</a></div>
-  <div class="layout">
-    <section class="panel" aria-label="SQL Editor">
-      <div class="panel-head"><div><h2 class="panel-title">⌨️ SQL Editor</h2><p class="panel-sub">নিজে লিখো, ভুল করো, শিখে নাও</p></div><span class="badge">PRACTICE LAB</span></div>
-      <div class="section-in">
-        <span class="guide-label">উদাহরণ দেখো • যেকোনো কমান্ডে ক্লিক করো</span>
-        <div class="query-buttons" id="examples"></div>
-        <div class="editor-top"><label for="sql-input">তোমার SQL Query</label><span>MySQL-এর প্রাথমিক syntax</span></div>
-        <textarea class="editor" id="sql-input" spellcheck="false" aria-label="SQL query লিখুন" placeholder="CREATE TABLE Students (&#10;  id INT PRIMARY KEY,&#10;  name VARCHAR(50)&#10;);"></textarea>
-        <div class="actions"><button class="primary" id="run-btn" type="button">▶ Run Query</button><button class="secondary" id="demo-btn" type="button">📦 ডেমো ডেটা</button><button class="secondary" id="reset-btn" type="button">↻ Reset DB</button><span class="keyboard">Ctrl / ⌘ + Enter</span></div>
-        <div class="console-result" id="result" role="status" aria-live="polite"><div class="result-title">🧪 এখন অনুশীলন শুরু করো</div><div class="result-msg">কোনো Query Run করা হয়নি। CREATE উদাহরণ দিয়ে শুরু করতে পারো।</div></div>
-      </div>
-    </section>
-    <section class="panel" aria-label="Database Explorer">
-      <div class="panel-head"><div><h2 class="panel-title">🗄️ Database Explorer</h2><p class="panel-sub">Query চালানোর সাথে সাথেই ফলাফল দেখাবে</p></div><span class="badge">LIVE VIEW</span></div>
-      <div class="explorer-head"><span class="db-icon">▤</span><span class="db-name">school_db</span><span class="db-meta" id="db-state">Database connected ✓</span></div>
-      <div class="tables-bar"><div class="tables-bar-label">TABLES</div><div class="table-list" id="table-list"></div></div>
-      <div class="table-detail" id="table-detail"></div>
-    </section>
-  </div>
 
-  <section class="panel datatype-section" id="datatype-academy" aria-label="Data Type শেখার ল্যাব">
-    <div class="datatype-heading"><div><h2>🧩 Data Type Learning Lab</h2><p>কোন ডেটা টাইপ কোন মান গ্রহণ করে? সঠিক–ভুল উদাহরণ দেখে শিখো, নিজে value পরীক্ষা করো, তারপর SQL Editor-এ চালিয়ে দেখো।</p></div><span class="badge">INTERACTIVE GUIDE</span></div>
-    <div class="dtype-body">
-      <div class="dtype-notice"><strong>মনে রেখো:</strong> সংখ্যার মান <code>25</code>, লেখার মান <code>'Rahim'</code>, তারিখ <code>'2026-11-05'</code>। <code>VARCHAR(5)</code>-এ সর্বোচ্চ ৫টি অক্ষর, আর <code>DECIMAL(5,2)</code>-এ মোট ৫টি অঙ্কের মধ্যে দশমিকের পরে সর্বোচ্চ ২টি অঙ্ক রাখা যায়।</div>
-      <div class="dtype-learning-layout">
-        <div class="dtype-guide-pane">
-          <div class="dtype-pane-title"><strong>📖 Data Type বেছে নাও</strong><span>যেকোনো কার্ডে ক্লিক করলে পাশেই ফলাফল দেখাবে</span></div>
-          <div class="dtype-filters" id="dtype-filters" aria-label="ডেটা টাইপের বিভাগ"></div>
-          <div class="dtype-grid" id="dtype-grid" aria-label="ডেটা টাইপ ও উদাহরণ"></div>
+<body>
+  <main class="container" id="sqlApp">
+    <header class="hero">
+      <span class="eyebrow"><i class="dot"></i> HSC ICT · CHAPTER 06 · LIVE PRACTICE</span>
+      <h1>SQL Query Simulator</h1>
+      <p>বাংলায় SQL শেখার প্র্যাকটিস ল্যাব। নিজের Query লিখে Run করো—কোন টেবিল তৈরি হলো, রেকর্ড বদলালো, কিংবা কোথায় ভুল
+        হলো, সব দেখতে পাবে।</p>
+      <div class="hero-stats"><span><strong id="stat-tables">0</strong> টেবিল</span><span><strong
+            id="stat-rows">0</strong> মোট রেকর্ড</span><span>৬টি প্রধান কমান্ড</span><span>🔒 ব্রাউজারেই সিমুলেশন</span>
+      </div>
+    </header>
+    <div class="tip">💡 <strong>শুরু করার নিয়ম:</strong> প্রথমে <b>CREATE</b> বেছে Run করো, তারপর <b>INSERT</b>। পরের
+      কমান্ডগুলো একে একে চেষ্টা করো। চাইলে নিজের মতো SQL লিখতে পারো। &nbsp;<a class="dtype-inline-link"
+        href="#datatype-academy">🧩 Data Type-ও শিখো ↓</a></div>
+    <div class="layout">
+      <section class="panel" aria-label="SQL Editor">
+        <div class="panel-head">
+          <div>
+            <h2 class="panel-title">⌨️ SQL Editor</h2>
+            <p class="panel-sub">নিজে লিখো, ভুল করো, শিখে নাও</p>
+          </div><span class="badge">PRACTICE LAB</span>
         </div>
-        <div class="dtype-workbench" id="dtype-workbench">
-        <div class="dtype-checker">
-          <div class="dtype-checker-top"><h3>🧪 নিজের value পরীক্ষা করো</h3><span class="dtype-live-chip">● LIVE RESULT</span></div><p class="dtype-mini">বাম থেকে Data Type বেছে নাও। এখানে value বদলে পরীক্ষা করলেই নিচে ফলাফল দেখাবে।</p>
-          <div class="dtype-input-row"><label for="dtype-type-input">Data Type <input id="dtype-type-input" type="text" value="VARCHAR(5)" autocomplete="off" spellcheck="false" placeholder="যেমন: DECIMAL(5,2)"></label><label for="dtype-value-input">SQL Value <input id="dtype-value-input" type="text" value="'Rafi'" autocomplete="off" spellcheck="false" placeholder="যেমন: 'Rahim' বা 25"></label></div>
-          <div class="dtype-actions"><button class="primary" type="button" id="dtype-check-btn">✓ মান পরীক্ষা করো</button><button class="secondary" type="button" id="dtype-correct-btn">সঠিক উদাহরণ</button><button class="secondary" type="button" id="dtype-wrong-btn">ভুল উদাহরণ</button></div>
-          <div class="dtype-check-result" id="dtype-check-result" role="status" aria-live="polite"><strong>পরীক্ষার জন্য প্রস্তুত</strong><p>যেকোনো value লিখে “মান পরীক্ষা করো” চাপো।</p></div>
+        <div class="section-in">
+          <span class="guide-label">উদাহরণ দেখো • যেকোনো কমান্ডে ক্লিক করো</span>
+          <div class="query-buttons" id="examples"></div>
+          <div class="editor-top"><label for="sql-input">তোমার SQL Query</label><span>MySQL-এর প্রাথমিক syntax</span>
+          </div>
+          <textarea class="editor" id="sql-input" spellcheck="false" aria-label="SQL query লিখুন"
+            placeholder="CREATE TABLE Students (&#10;  id INT PRIMARY KEY,&#10;  name VARCHAR(50)&#10;);"></textarea>
+          <div class="actions"><button class="primary" id="run-btn" type="button">▶ Run Query</button><button
+              class="secondary" id="demo-btn" type="button">📦 ডেমো ডেটা</button><button class="secondary"
+              id="reset-btn" type="button">↻ Reset DB</button><span class="keyboard">Ctrl / ⌘ + Enter</span></div>
+          <div class="console-result" id="result" role="status" aria-live="polite">
+            <div class="result-title">🧪 এখন অনুশীলন শুরু করো</div>
+            <div class="result-msg">কোনো Query Run করা হয়নি। CREATE উদাহরণ দিয়ে শুরু করতে পারো।</div>
+          </div>
         </div>
-        <details class="dtype-explain">
-          <summary>💻 SQL Editor-এও চালিয়ে দেখো <span class="dtype-code-toggle">কোড দেখো</span></summary>
-          <div class="dtype-explain-inner"><p class="dtype-mini">নিচের SQL কোড Run করলে সত্যিই টেবিল তৈরি হবে এবং নির্বাচিত value ঢুকবে—অথবা ভুল হলে Error দেখাবে।</p>
-          <pre class="dtype-example-block" id="dtype-sql-preview">CREATE TABLE TypePractice (
+      </section>
+      <section class="panel" aria-label="Database Explorer">
+        <div class="panel-head">
+          <div>
+            <h2 class="panel-title">🗄️ Database Explorer</h2>
+            <p class="panel-sub">Query চালানোর সাথে সাথেই ফলাফল দেখাবে</p>
+          </div><span class="badge">LIVE VIEW</span>
+        </div>
+        <div class="explorer-head"><span class="db-icon">▤</span><span class="db-name">school_db</span><span
+            class="db-meta" id="db-state">Database connected ✓</span></div>
+        <div class="tables-bar">
+          <div class="tables-bar-label">TABLES</div>
+          <div class="table-list" id="table-list"></div>
+        </div>
+        <div class="table-detail" id="table-detail"></div>
+      </section>
+    </div>
+
+    <section class="panel datatype-section" id="datatype-academy" aria-label="Data Type শেখার ল্যাব">
+      <div class="datatype-heading">
+        <div>
+          <h2>🧩 Data Type Learning Lab</h2>
+          <p>কোন ডেটা টাইপ কোন মান গ্রহণ করে? সঠিক–ভুল উদাহরণ দেখে শিখো, নিজে value পরীক্ষা করো, তারপর SQL Editor-এ
+            চালিয়ে দেখো।</p>
+        </div><span class="badge">INTERACTIVE GUIDE</span>
+      </div>
+      <div class="dtype-body">
+        <div class="dtype-notice"><strong>মনে রেখো:</strong> সংখ্যার মান <code>25</code>, লেখার মান
+          <code>'Rahim'</code>, তারিখ <code>'2026-11-05'</code>। <code>VARCHAR(5)</code>-এ সর্বোচ্চ ৫টি অক্ষর, আর
+          <code>DECIMAL(5,2)</code>-এ মোট ৫টি অঙ্কের মধ্যে দশমিকের পরে সর্বোচ্চ ২টি অঙ্ক রাখা যায়।</div>
+        <div class="dtype-learning-layout">
+          <div class="dtype-guide-pane">
+            <div class="dtype-pane-title"><strong>📖 Data Type বেছে নাও</strong><span>যেকোনো কার্ডে ক্লিক করলে পাশেই
+                ফলাফল দেখাবে</span></div>
+            <div class="dtype-filters" id="dtype-filters" aria-label="ডেটা টাইপের বিভাগ"></div>
+            <div class="dtype-grid" id="dtype-grid" aria-label="ডেটা টাইপ ও উদাহরণ"></div>
+          </div>
+          <div class="dtype-workbench" id="dtype-workbench">
+            <div class="dtype-checker">
+              <div class="dtype-checker-top">
+                <h3>🧪 নিজের value পরীক্ষা করো</h3><span class="dtype-live-chip">● LIVE RESULT</span>
+              </div>
+              <p class="dtype-mini">বাম থেকে Data Type বেছে নাও। এখানে value বদলে পরীক্ষা করলেই নিচে ফলাফল দেখাবে।</p>
+              <div class="dtype-input-row"><label for="dtype-type-input">Data Type <input id="dtype-type-input"
+                    type="text" value="VARCHAR(5)" autocomplete="off" spellcheck="false"
+                    placeholder="যেমন: DECIMAL(5,2)"></label><label for="dtype-value-input">SQL Value <input
+                    id="dtype-value-input" type="text" value="'Rafi'" autocomplete="off" spellcheck="false"
+                    placeholder="যেমন: 'Rahim' বা 25"></label></div>
+              <div class="dtype-actions"><button class="primary" type="button" id="dtype-check-btn">✓ মান পরীক্ষা
+                  করো</button><button class="secondary" type="button" id="dtype-correct-btn">সঠিক উদাহরণ</button><button
+                  class="secondary" type="button" id="dtype-wrong-btn">ভুল উদাহরণ</button></div>
+              <div class="dtype-check-result" id="dtype-check-result" role="status" aria-live="polite"><strong>পরীক্ষার
+                  জন্য প্রস্তুত</strong>
+                <p>যেকোনো value লিখে “মান পরীক্ষা করো” চাপো।</p>
+              </div>
+            </div>
+            <details class="dtype-explain">
+              <summary>💻 SQL Editor-এও চালিয়ে দেখো <span class="dtype-code-toggle">কোড দেখো</span></summary>
+              <div class="dtype-explain-inner">
+                <p class="dtype-mini">নিচের SQL কোড Run করলে সত্যিই টেবিল তৈরি হবে এবং নির্বাচিত value ঢুকবে—অথবা ভুল
+                  হলে Error দেখাবে।</p>
+                <pre class="dtype-example-block" id="dtype-sql-preview">CREATE TABLE TypePractice (
   id INT PRIMARY KEY,
   sample_value VARCHAR(5)
 );
 INSERT INTO TypePractice VALUES (1, 'Rafi');</pre>
-          <button class="secondary" type="button" id="dtype-to-editor">↗ SQL Editor-এ পাঠাও</button>
-          <p class="dtype-foot">Editor-এ পাঠালে শুধু Query বসবে। <strong>Run Query</strong> চাপলে Database Explorer-এ ফলাফল দেখাবে। একই পরীক্ষার জন্য পুরোনো <code>TypePractice</code> টেবিল মুছে নতুনটি তৈরি হবে।</p>
+                <button class="secondary" type="button" id="dtype-to-editor">↗ SQL Editor-এ পাঠাও</button>
+                <p class="dtype-foot">Editor-এ পাঠালে শুধু Query বসবে। <strong>Run Query</strong> চাপলে Database
+                  Explorer-এ ফলাফল দেখাবে। একই পরীক্ষার জন্য পুরোনো <code>TypePractice</code> টেবিল মুছে নতুনটি তৈরি
+                  হবে।</p>
+              </div>
+            </details>
           </div>
-        </details>
         </div>
+        <p class="dtype-footnote">🔎 এটি শেখার জন্য তুলনামূলক কঠোর (strict) সিমুলেটর। বাস্তব MySQL কিছু ক্ষেত্রে value
+          স্বয়ংক্রিয়ভাবে রূপান্তর বা সংক্ষিপ্ত করতে পারে; এখানে তা দেখানো হয় না। BOOLEAN, CHAR এবং TIME-এর কিছু বাস্তব
+          MySQL আচরণও সরল করা হয়েছে।</p>
       </div>
-      <p class="dtype-footnote">🔎 এটি শেখার জন্য তুলনামূলক কঠোর (strict) সিমুলেটর। বাস্তব MySQL কিছু ক্ষেত্রে value স্বয়ংক্রিয়ভাবে রূপান্তর বা সংক্ষিপ্ত করতে পারে; এখানে তা দেখানো হয় না। BOOLEAN, CHAR এবং TIME-এর কিছু বাস্তব MySQL আচরণও সরল করা হয়েছে।</p>
+    </section>
+    <div class="lower">
+      <section class="panel">
+        <h2>📚 শেখার ৬টি ধাপ</h2>
+        <div class="guide-steps">
+          <div class="step"><b>1</b>
+            <div><strong>CREATE</strong> — নতুন টেবিল ও কলাম তৈরি</div>
+          </div>
+          <div class="step"><b>2</b>
+            <div><strong>INSERT</strong> — টেবিলে নতুন রেকর্ড যোগ</div>
+          </div>
+          <div class="step"><b>3</b>
+            <div><strong>UPDATE</strong> — পুরোনো রেকর্ডের মান বদলানো</div>
+          </div>
+          <div class="step"><b>4</b>
+            <div><strong>ALTER</strong> — টেবিলের গঠন বদলানো</div>
+          </div>
+          <div class="step"><b>5</b>
+            <div><strong>DELETE</strong> — টেবিল রেখে রেকর্ড মুছে ফেলা</div>
+          </div>
+          <div class="step"><b>6</b>
+            <div><strong>DROP</strong> — সম্পূর্ণ টেবিল মুছে ফেলা</div>
+          </div>
+        </div>
+      </section>
+      <section class="panel">
+        <h2>🕘 Query History</h2>
+        <div class="log" id="query-log">
+          <div class="log-empty">সফল ও ভুল Query-গুলোর ফলাফল এখানে জমা হবে।</div>
+        </div>
+      </section>
     </div>
-  </section>
-  <div class="lower">
-    <section class="panel"><h2>📚 শেখার ৬টি ধাপ</h2><div class="guide-steps">
-      <div class="step"><b>1</b><div><strong>CREATE</strong> — নতুন টেবিল ও কলাম তৈরি</div></div>
-      <div class="step"><b>2</b><div><strong>INSERT</strong> — টেবিলে নতুন রেকর্ড যোগ</div></div>
-      <div class="step"><b>3</b><div><strong>UPDATE</strong> — পুরোনো রেকর্ডের মান বদলানো</div></div>
-      <div class="step"><b>4</b><div><strong>ALTER</strong> — টেবিলের গঠন বদলানো</div></div>
-      <div class="step"><b>5</b><div><strong>DELETE</strong> — টেবিল রেখে রেকর্ড মুছে ফেলা</div></div>
-      <div class="step"><b>6</b><div><strong>DROP</strong> — সম্পূর্ণ টেবিল মুছে ফেলা</div></div>
-    </div></section>
-    <section class="panel"><h2>🕘 Query History</h2><div class="log" id="query-log"><div class="log-empty">সফল ও ভুল Query-গুলোর ফলাফল এখানে জমা হবে।</div></div></section>
-  </div>
-  <div class="footer">শিক্ষামূলক SQL সিমুলেটর • বাস্তব সার্ভার বা ডেটাবেসে কোনো পরিবর্তন হয় না • SQL-এর নির্বাচিত প্রাথমিক নিয়ম সমর্থন করে</div>
-</main>
-<script>
-(()=>{'use strict';
-const app=document.getElementById('sqlApp');
-const $=id=>app.querySelector('#'+id);
-const examples=[
- {cmd:'CREATE',title:'টেবিল তৈরি',sql:"CREATE TABLE Students (\n  id INT PRIMARY KEY,\n  name VARCHAR(50) NOT NULL,\n  gpa DECIMAL(3,2)\n);"},
- {cmd:'INSERT',title:'রেকর্ড যোগ',sql:"INSERT INTO Students (id, name, gpa)\nVALUES (1, 'Rahim', 4.75), (2, 'Karim', 4.50);"},
- {cmd:'UPDATE',title:'তথ্য পরিবর্তন',sql:"UPDATE Students\nSET gpa = 5.00\nWHERE id = 1;"},
- {cmd:'ALTER',title:'কলাম যোগ',sql:"ALTER TABLE Students\nADD COLUMN city VARCHAR(30);"},
- {cmd:'DELETE',title:'রেকর্ড মুছো',sql:"DELETE FROM Students\nWHERE id = 2;"},
- {cmd:'DROP',title:'টেবিল মুছো',sql:"DROP TABLE Students;"}
-];
-let db=Object.create(null),selected='',view='data',history=[],lastSelect=null;
-const clone=x=>JSON.parse(JSON.stringify(x));
-const key=s=>s.toLowerCase();
-const ident='[A-Za-z_][A-Za-z0-9_]*';
-const fail=(s,hint='')=>{const e=new Error(s);e.hint=hint;throw e};
-const escapeHTML=s=>String(s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
-function splitSQL(str,separator){const out=[];let buf='',quote=false,depth=0;for(let i=0;i<str.length;i++){let c=str[i];if(c==="'"){buf+=c;if(quote&&str[i+1]==="'"){buf+=str[++i];continue}quote=!quote;continue}if(!quote){if(c==='(')depth++;if(c===')'){depth--;if(depth<0)fail('বন্ধনী ) অতিরিক্ত দেওয়া হয়েছে।')}if(c===separator&&depth===0){if(separator===','&&!buf.trim())fail('কমার (,) মাঝে একটি অংশ ফাঁকা আছে।');out.push(buf.trim());buf='';continue}}buf+=c}if(quote)fail("স্ট্রিংয়ের শেষের ' (single quote) নেই।", "যেমন: 'Rahim'");if(depth!==0)fail('বন্ধনী ( এবং ) সমান সংখ্যায় নেই।');if(separator===','&&!buf.trim()&&out.length)fail('শেষে অতিরিক্ত কমা (,) দেওয়া হয়েছে।');if(buf.trim())out.push(buf.trim());return out}
-function literal(raw){const t=raw.trim();if(/^NULL$/i.test(t))return null;if(/^TRUE$/i.test(t))return true;if(/^FALSE$/i.test(t))return false;if(/^'(?:[^']|'')*'$/.test(t))return t.slice(1,-1).replace(/''/g,"'");if(/^-?\d+(?:\.\d+)?$/.test(t))return Number(t);fail('ভুল value: '+t, "টেক্সটের চারপাশে single quote দাও: 'Rahim'")}
-function parseDef(text){const m=text.trim().match(new RegExp('^('+ident+')\\s+(TINYINT|SMALLINT|INTEGER|INT|BIGINT|FLOAT|DOUBLE|BOOLEAN|BOOL|DATETIME|DATE|TIME|TEXT|VARCHAR\\s*\\(\\s*\\d+\\s*\\)|CHAR\\s*\\(\\s*\\d+\\s*\\)|DECIMAL\\s*\\(\\s*\\d+\\s*,\\s*\\d+\\s*\\))\\s*(.*)$','i'));
- if(!m)fail('কলামের সংজ্ঞা ঠিক নেই: '+text,'যেমন: name VARCHAR(50) NOT NULL অথবা id INT PRIMARY KEY');
- const name=m[1],type=m[2].toUpperCase().replace(/\s+/g,''),rest=m[3].trim();
- const pk=/\bPRIMARY\s+KEY\b/i.test(rest),required=pk||/\bNOT\s+NULL\b/i.test(rest);
- const remainder=rest.replace(/\bPRIMARY\s+KEY\b/ig,'').replace(/\bNOT\s+NULL\b/ig,'').replace(/\bNULL\b/ig,'').trim();
- if(remainder)fail('অজানা column constraint: '+remainder,'এখানে PRIMARY KEY ও NOT NULL ব্যবহার করতে পারো।');
- if(/^(?:VARCHAR|CHAR)\(0\)$/i.test(type))fail('VARCHAR/CHAR-এর দৈর্ঘ্য ০ হতে পারে না।');
- if(/^CHAR\(/.test(type)&&+type.match(/\d+/)[0]>255)fail('CHAR(n)-এ n সর্বোচ্চ 255।');
- if(/^VARCHAR\(/.test(type)&&+type.match(/\d+/)[0]>65535)fail('এই ল্যাবে VARCHAR(n)-এ n সর্বোচ্চ 65535।');
- if(/^DECIMAL\(/.test(type)){const match=type.match(/\((\d+),(\d+)\)/);if(+match[2]>+match[1]||+match[1]===0||+match[1]>65||+match[2]>30)fail('DECIMAL(M,D)-এ 1≤M≤65 এবং 0≤D≤30, আর D≤M হতে হবে।')}
- return {name,key:key(name),type,required,pk}
-}
-function getTable(store,name){const t=store[key(name)];if(!t)fail('“'+name+'” নামে টেবিল নেই।','আগে CREATE TABLE দিয়ে টেবিল তৈরি করো অথবা 📦 ডেমো ডেটা লোড করো।');return t}
-function getCol(t,name){const c=t.cols.find(x=>x.key===key(name));if(!c)fail('“'+name+'” কলামটি '+t.name+' টেবিলে নেই।','Database Explorer → গঠন ট্যাবে কলামগুলো দেখো।');return c}
-function validDateString(value){
- const m=String(value).match(/^(\d{4})-(\d{2})-(\d{2})$/);if(!m)return false;
- const y=+m[1],mo=+m[2],d=+m[3];if(y<1000||y>9999||mo<1||mo>12||d<1)return false;
- const leap=y%4===0&&(y%100!==0||y%400===0);
- return d<=[31,leap?29:28,31,30,31,30,31,31,30,31,30,31][mo-1]
-}
-function validTimeString(value){const m=String(value).match(/^(\d{2}):(\d{2}):(\d{2})$/);return !!m&&+m[1]<=23&&+m[2]<=59&&+m[3]<=59}
-function checkType(c,v){
- if(v===null){if(c.required)fail(c.name+' কলামে NULL রাখা যাবে না (NOT NULL / PRIMARY KEY)।');return v}
- const t=c.type;
- if(/^(TINYINT|SMALLINT|INT|INTEGER|BIGINT)$/.test(t)){
-  if(typeof v!=='number'||!Number.isSafeInteger(v))fail(c.name+' ('+t+') কলামে পূর্ণসংখ্যা দিতে হবে।','যেমন: 25 বা -3 — দশমিক/quoted text নয়।');
-  const ranges={TINYINT:[-128,127],SMALLINT:[-32768,32767],INT:[-2147483648,2147483647],INTEGER:[-2147483648,2147483647]};
-  if(ranges[t]&&(v<ranges[t][0]||v>ranges[t][1]))fail(c.name+' ('+t+')-এর সীমা '+ranges[t][0]+' থেকে '+ranges[t][1]+'।');
-  return v
- }
- if(/^(FLOAT|DOUBLE|DECIMAL)/.test(t)){
-  if(typeof v!=='number'||!Number.isFinite(v))fail(c.name+' ('+t+') কলামে সংখ্যা দিতে হবে।','যেমন: 4.75 — টেক্সটের মতো quote দেবে না।');
-  if(t.startsWith('DECIMAL')){
-   const [p,d]=t.match(/\d+/g).map(Number),repr=String(Math.abs(v));
-   if(repr.includes('e'))fail(c.name+' কলামে '+t+'-এর সীমার বাইরে সংখ্যা।');
-   const parts=repr.split('.'),integerDigits=parts[0].replace(/^0+/,'').length,fractionDigits=(parts[1]||'').length;
-   if(integerDigits>p-d||fractionDigits>d)fail(c.name+' কলামে '+t+' অনুযায়ী সংখ্যা দাও।','মোট সর্বোচ্চ '+p+'টি অঙ্ক; দশমিকের পরে সর্বোচ্চ '+d+'টি। যেমন: DECIMAL(5,2)-এ 123.45 গ্রহণযোগ্য, 1234.56 নয়।');
-  }
-  return v
- }
- if(/^(VARCHAR|CHAR|TEXT)/.test(t)){
-  if(typeof v!=='string')fail(c.name+' ('+t+') কলামে টেক্সট দিতে single quote ব্যবহার করো।',"যেমন: 'Rahim'");
-  const limit=t.match(/\((\d+)\)/);if(limit&&Array.from(v).length>+limit[1])fail(c.name+' কলামের সর্বোচ্চ দৈর্ঘ্য '+limit[1]+' অক্ষর।',"যেমন: VARCHAR(5)-এ 'Rafi' চলে, 'Bangladesh' চলে না।");return v
- }
- if(t==='DATE'){
-  if(typeof v!=='string'||!validDateString(v))fail(c.name+" কলামে DATE লিখতে হবে 'YYYY-MM-DD' আকারে ও বৈধ তারিখ হতে হবে।","যেমন: '2026-11-05' ঠিক, '2026-02-30' ভুল।");return v
- }
- if(t==='TIME'){
-  if(typeof v!=='string'||!validTimeString(v))fail(c.name+" কলামে TIME লিখতে হবে 'HH:MM:SS' আকারে।","যেমন: '14:30:05' ঠিক, '25:70:00' ভুল।");return v
- }
- if(t==='DATETIME'){
-  if(typeof v!=='string'||!/^\d{4}-\d{2}-\d{2} \d{2}:\d{2}:\d{2}$/.test(v)||!validDateString(v.slice(0,10))||!validTimeString(v.slice(11)))fail(c.name+" কলামে DATETIME লিখবে 'YYYY-MM-DD HH:MM:SS' আকারে।","যেমন: '2026-11-05 14:30:05'");return v
- }
- if(t==='BOOLEAN'||t==='BOOL'){
-  if(v===true||v===1)return true;
-  if(v===false||v===0)return false;
-  fail(c.name+' কলামে TRUE/FALSE অথবা 1/0 দিতে হবে।',"যেমন: TRUE অথবা 0 — 'Yes' নয়।")
- }
- return v
-}
-function validateRows(t,rows){const pks=t.cols.filter(c=>c.pk);for(const row of rows){for(const c of t.cols){row[c.key]=checkType(c,row[c.key]===undefined?null:row[c.key])}}if(pks.length){const keys=new Set();for(const r of rows){const signature=JSON.stringify(pks.map(c=>r[c.key]));if(keys.has(signature))fail('PRIMARY KEY-এর মান একই দুই রেকর্ডে দেওয়া যায় না।','প্রতিটি রেকর্ডের id আলাদা রাখো।');keys.add(signature)}}}
-function whereFilter(t,raw){if(!raw)return ()=>true;const conditions=raw.split(/\s+AND\s+/i).map(s=>s.trim());const checks=conditions.map(cond=>{let isn=cond.match(new RegExp('^('+ident+')\\s+IS\\s+(NOT\\s+)?NULL$','i'));if(isn){const col=getCol(t,isn[1]);return row=>isn[2]?row[col.key]!==null:row[col.key]===null}let m=cond.match(new RegExp('^('+ident+')\\s*(>=|<=|<>|!=|=|>|<)\\s*(.+)$','i'));if(!m)fail('WHERE শর্তটি সঠিক নয়: '+cond,'যেমন: WHERE id = 1 অথবা WHERE gpa >= 4.5');const c=getCol(t,m[1]),v=literal(m[3]),op=m[2];return row=>{const a=row[c.key];if(a===null||v===null)return false;if(op==='=')return a===v;if(op==='!='||op==='<>')return a!==v;if(op==='>')return a>v;if(op==='<')return a<v;if(op==='>=')return a>=v;return a<=v}});return row=>checks.every(fn=>fn(row))}
-function execOne(store,query){let m,t,s=query.trim();
- if(/^CREATE\b/i.test(s)){
- m=s.match(new RegExp('^CREATE\\s+TABLE\\s+('+ident+')\\s*\\(([\\s\\S]*)\\)$','i'));
- if(!m)fail('CREATE TABLE-এর syntax ভুল।','যেমন: CREATE TABLE Students (id INT PRIMARY KEY, name VARCHAR(50));');
- if(store[key(m[1])])fail('“'+m[1]+'” টেবিলটি আগে থেকেই আছে।','নতুন নাম ব্যবহার করো অথবা পুরোনো টেবিল DROP করো।');
- const parts=splitSQL(m[2],','),cols=[];let tablePk=[];if(!parts.length)fail('টেবিলে অন্তত একটি কলাম থাকতে হবে।');
- for(const part of parts){let p=part.match(new RegExp('^PRIMARY\\s+KEY\\s*\\(\\s*('+ident+')\\s*\\)$','i'));if(p){tablePk.push(key(p[1]));continue}let col=parseDef(part);if(cols.some(c=>c.key===col.key))fail('একই কলাম দুইবার: '+col.name);cols.push(col)}
- if(!cols.length)fail('টেবিলে অন্তত একটি কলাম থাকতে হবে।');
- for(const pk of tablePk){const col=cols.find(c=>c.key===pk);if(!col)fail('PRIMARY KEY যে কলামে দেওয়া হয়েছে সেটি নেই: '+pk);col.pk=true;col.required=true}
- if(cols.filter(c=>c.pk).length>1)fail('এই প্রাথমিক সিমুলেটরে একটি PRIMARY KEY কলাম সমর্থিত।');
- store[key(m[1])]={name:m[1],cols,rows:[]};return {msg:'✅ '+m[1]+' নামে নতুন টেবিল তৈরি হয়েছে।',hint:cols.length+'টি কলাম তৈরি হয়েছে। ডান পাশে গঠন ট্যাবে দেখো।',table:key(m[1])}}
- if(/^INSERT\b/i.test(s)){
- m=s.match(new RegExp('^INSERT\\s+INTO\\s+('+ident+')\\s*(?:\\(([^()]*)\\))?\\s+VALUES\\s+([\\s\\S]+)$','i'));
- if(!m)fail('INSERT INTO-এর syntax ভুল।',"যেমন: INSERT INTO Students (id, name) VALUES (1, 'Rahim');");
- t=getTable(store,m[1]);let cols=m[2]!==undefined?splitSQL(m[2],',').map(x=>getCol(t,x)):t.cols;
- if(!cols.length||new Set(cols.map(x=>x.key)).size!==cols.length)fail('INSERT-এর কলামের তালিকা ভুল বা একই কলাম দুইবার।');
- const groups=splitSQL(m[3],',');if(!groups.length)fail('VALUES-এ অন্তত একটি রেকর্ড লাগবে।');const inserted=[];
- for(const group of groups){if(!/^\([\s\S]*\)$/.test(group))fail('VALUES-এর প্রতিটি রেকর্ড ( ... ) বন্ধনীতে লিখো।');const vals=splitSQL(group.slice(1,-1),',').map(literal);if(vals.length!==cols.length)fail('কলামের সংখ্যা ('+cols.length+') এবং value-এর সংখ্যা ('+vals.length+') সমান নয়।');let r=Object.fromEntries(t.cols.map(c=>[c.key,null]));cols.forEach((c,i)=>r[c.key]=vals[i]);inserted.push(r)}
- validateRows(t,[...t.rows,...inserted]);t.rows.push(...inserted);return {msg:'✅ '+inserted.length+'টি নতুন রেকর্ড যোগ হয়েছে।',hint:'INSERT টেবিলের গঠন পরিবর্তন করে না; নতুন row যোগ করে।',table:key(m[1])}}
- if(/^UPDATE\b/i.test(s)){
- m=s.match(new RegExp('^UPDATE\\s+('+ident+')\\s+SET\\s+([\\s\\S]+?)(?:\\s+WHERE\\s+([\\s\\S]+))?$','i'));
- if(!m)fail('UPDATE-এর syntax ভুল।','যেমন: UPDATE Students SET gpa = 5.00 WHERE id = 1;');
- t=getTable(store,m[1]);const changes=splitSQL(m[2],',').map(part=>{let a=part.match(new RegExp('^('+ident+')\\s*=\\s*([\\s\\S]+)$','i'));if(!a)fail('SET লেখার নিয়ম: column = value');const c=getCol(t,a[1]);return [c,literal(a[2])]});
- if(!changes.length||new Set(changes.map(x=>x[0].key)).size!==changes.length)fail('SET-এর কলাম একাধিকবার লিখো না।');const test=whereFilter(t,m[3]);let count=0;
- for(const row of t.rows)if(test(row)){for(const [c,v] of changes)row[c.key]=v;count++}validateRows(t,t.rows);
- return {msg:'✅ '+count+'টি রেকর্ড UPDATE হয়েছে।',hint:m[3]?'WHERE শর্ত মিলে এমন রেকর্ডগুলো পরিবর্তিত হয়েছে।':'⚠️ WHERE নেই: টেবিলের সব রেকর্ডে UPDATE প্রয়োগ করা হয়েছে।',table:key(m[1])}}
- if(/^DELETE\b/i.test(s)){
- m=s.match(new RegExp('^DELETE\\s+FROM\\s+('+ident+')(?:\\s+WHERE\\s+([\\s\\S]+))?$','i'));
- if(!m)fail('DELETE-এর syntax ভুল।','যেমন: DELETE FROM Students WHERE id = 2;');
- t=getTable(store,m[1]);const test=whereFilter(t,m[2]),before=t.rows.length;t.rows=t.rows.filter(row=>!test(row));return {msg:'✅ '+(before-t.rows.length)+'টি রেকর্ড মুছে গেছে।',hint:m[2]?'টেবিলটি আছে; শুধু শর্ত মেলা রেকর্ডগুলো মুছে গেছে।':'⚠️ WHERE নেই: সব রেকর্ড মুছে গেছে, কিন্তু টেবিলটি রয়ে গেছে।',table:key(m[1])}}
- if(/^DROP\b/i.test(s)){
- m=s.match(new RegExp('^DROP\\s+TABLE\\s+(IF\\s+EXISTS\\s+)?('+ident+')$','i'));
- if(!m)fail('DROP TABLE-এর syntax ভুল।','যেমন: DROP TABLE Students;');
- if(!store[key(m[2])]&&m[1])return {msg:'ℹ️ টেবিল ছিল না; IF EXISTS থাকার কারণে Error হয়নি।',hint:'কোনো পরিবর্তন হয়নি।'};
- t=getTable(store,m[2]);delete store[key(m[2])];return {msg:'✅ '+t.name+' টেবিলটি DROP হয়েছে।',hint:'টেবিলের গঠন ও সব রেকর্ড একসাথে মুছে গেছে।',table:''}}
- if(/^ALTER\b/i.test(s)){
- m=s.match(new RegExp('^ALTER\\s+TABLE\\s+('+ident+')\\s+([\\s\\S]+)$','i'));if(!m)fail('ALTER TABLE-এর syntax ভুল।','যেমন: ALTER TABLE Students ADD COLUMN city VARCHAR(30);');
- t=getTable(store,m[1]);const operation=m[2].trim();let a;
- if((a=operation.match(/^ADD\s+(?:COLUMN\s+)?([\s\S]+)$/i))){const c=parseDef(a[1]);if(t.cols.some(x=>x.key===c.key))fail(c.name+' কলামটি আগে থেকেই আছে।');if(c.required&&t.rows.length)fail('রেকর্ড থাকা টেবিলে সরাসরি NOT NULL কলাম যোগ করা যাবে না।','আগে nullable কলাম যোগ করো।');t.cols.push(c);t.rows.forEach(row=>row[c.key]=null);validateRows(t,t.rows);return {msg:'✅ '+c.name+' কলাম যোগ হয়েছে।',hint:'পুরোনো রেকর্ডগুলোর নতুন কলামে NULL দেখাবে।',table:key(m[1]),view:'structure'}}
- if((a=operation.match(new RegExp('^DROP\\s+(?:COLUMN\\s+)?('+ident+')$','i')))){const c=getCol(t,a[1]);if(t.cols.length===1)fail('টেবিলের একমাত্র কলাম DROP করা যাবে না।');t.cols=t.cols.filter(x=>x.key!==c.key);t.rows.forEach(row=>delete row[c.key]);return {msg:'✅ '+c.name+' কলাম মুছে গেছে।',hint:'ALTER DROP COLUMN করলে কলাম ও সেই কলামের তথ্য মুছে যায়।',table:key(m[1]),view:'structure'}}
- if((a=operation.match(/^MODIFY\s+(?:COLUMN\s+)?([\s\S]+)$/i))){const c=parseDef(a[1]);const old=getCol(t,c.name);c.pk=old.pk;c.required=c.required||old.pk;t.cols[t.cols.indexOf(old)]=c;validateRows(t,t.rows);return {msg:'✅ '+c.name+' কলামের ধরন/নিয়ম বদলেছে।',hint:'ALTER MODIFY টেবিলের গঠন পরিবর্তন করে।',table:key(m[1]),view:'structure'}}
- if((a=operation.match(new RegExp('^RENAME\\s+COLUMN\\s+('+ident+')\\s+TO\\s+('+ident+')$','i')))){const old=getCol(t,a[1]);if(t.cols.some(c=>c.key===key(a[2])))fail('নতুন কলাম নামটি আগে থেকেই আছে।');const previous=old.key;old.name=a[2];old.key=key(a[2]);t.rows.forEach(row=>{row[old.key]=row[previous];delete row[previous]});return {msg:'✅ কলামের নাম '+a[1]+' থেকে '+a[2]+' হয়েছে।',table:key(m[1]),view:'structure'}}
- if((a=operation.match(new RegExp('^RENAME\\s+(?:TO\\s+)?('+ident+')$','i')))){const newK=key(a[1]);if(store[newK]&&newK!==key(t.name))fail('নতুন টেবিল নামটি আগে থেকেই আছে।');delete store[key(t.name)];t.name=a[1];store[newK]=t;return {msg:'✅ টেবিলের নাম '+m[1]+' থেকে '+a[1]+' হয়েছে।',table:newK}}
- fail('ALTER TABLE-এর এই কাজটি সমর্থিত নয়।','ADD COLUMN, DROP COLUMN, MODIFY COLUMN, RENAME COLUMN অথবা RENAME TO ব্যবহার করো।')}
- if(/^SELECT\b/i.test(s)){
- m=s.match(new RegExp('^SELECT\\s+([\\s\\S]+?)\\s+FROM\\s+('+ident+')(?:\\s+WHERE\\s+([\\s\\S]+))?$','i'));
- if(!m)fail('SELECT-এর syntax ভুল।','যেমন: SELECT * FROM Students;');t=getTable(store,m[2]);const cols=m[1].trim()==='*'?t.cols:splitSQL(m[1],',').map(c=>getCol(t,c));const test=whereFilter(t,m[3]);const found=t.rows.filter(test).map(r=>Object.fromEntries(cols.map(c=>[c.key,r[c.key]])));return {msg:'✅ SELECT-এ '+found.length+'টি রেকর্ড পাওয়া গেছে।',hint:'SELECT ডেটা পরিবর্তন করে না; শুধু দেখায়।',table:key(m[2]),view:'data',select:{cols,rows:found}}}
- fail('কমান্ডটি সঠিক বা সমর্থিত নয়।','CREATE, INSERT, UPDATE, ALTER, DELETE, DROP বা SELECT দিয়ে শুরু করো।')
-}
-function showResult(ok,msg,hint,code){const node=$('result');node.className='console-result '+(ok?'good':'bad');node.innerHTML='<div class="result-title">'+(ok?'সফলভাবে Query চলেছে':'❌ Query Error')+'</div><div class="result-msg">'+escapeHTML(msg)+'</div>'+(hint?'<div class="result-hint">'+escapeHTML(hint)+'</div>':'')+(code?'<span class="result-code">'+escapeHTML(code)+'</span>':'')}
-function logItem(ok,msg,query){history.unshift({ok,msg,query});history=history.slice(0,14);$('query-log').innerHTML=history.map(x=>'<div class="log-item '+(x.ok?'':'err')+'"><strong>'+(x.ok?'✓ ':'✕ ')+escapeHTML(x.msg.replace(/^[✅ℹ️]\s*/,''))+'</strong><small>'+escapeHTML(x.query.slice(0,105))+'</small></div>').join('')}
-function render(){const names=Object.keys(db).sort();$('stat-tables').textContent=names.length;$('stat-rows').textContent=names.reduce((n,k)=>n+db[k].rows.length,0);$('db-state').textContent=names.length?'Database connected ✓':'Empty database';
- if(!db[selected])selected=names[0]||'';
- $('table-list').innerHTML=names.length?names.map(k=>'<button type="button" class="table-tab '+(k===selected?'selected':'')+'" data-table="'+escapeHTML(k)+'">▤ '+escapeHTML(db[k].name)+' <small>'+db[k].rows.length+'</small></button>').join(''):'<span class="empty-tabs">এখনো কোনো টেবিল নেই</span>';
- for(const button of $('table-list').querySelectorAll('button'))button.onclick=()=>{selected=button.dataset.table;lastSelect=null;render()};
- const detail=$('table-detail');if(!selected){detail.innerHTML='<div class="empty-db"><div class="illustration">▤</div><strong>তোমার Database খালি</strong><p>CREATE TABLE Query চালালে এখানে নতুন টেবিলটি দেখতে পাবে।</p></div>';return}
- const t=db[selected],selectOn=lastSelect&&lastSelect.table===selected;const cols=selectOn?lastSelect.cols:t.cols,rows=selectOn?lastSelect.rows:t.rows;
- let html='<div class="detail-top"><h3>▤ '+escapeHTML(t.name)+' <small style="font-size:11px;color:#8c97a8;font-weight:500">('+t.rows.length+' records)</small></h3><div class="switch"><button type="button" data-view="data" class="'+(view==='data'?'active':'')+'">ডেটা</button><button type="button" data-view="structure" class="'+(view==='structure'?'active':'')+'">গঠন</button></div></div>';
- if(view==='data'){
- html+='<div class="table-wrap"><table><thead><tr>'+cols.map(c=>'<th>'+escapeHTML(c.name)+'</th>').join('')+'</tr></thead><tbody>';
- if(!rows.length)html+='<tr><td colspan="'+Math.max(1,cols.length)+'" class="no-rows">কোনো রেকর্ড নেই — INSERT দিয়ে যোগ করো</td></tr>';
- else html+=rows.slice(0,300).map(r=>'<tr>'+cols.map(c=>'<td>'+(r[c.key]===null||r[c.key]===undefined?'<span class="null">NULL</span>':escapeHTML(String(r[c.key])))+'</td>').join('')+'</tr>').join('');html+='</tbody></table></div>'+(rows.length>300?'<div class="note">প্রথম ৩০০টি রেকর্ড দেখানো হচ্ছে।</div>':'')+(selectOn?'<div class="note">SELECT Query অনুযায়ী বাছাই করা ফলাফল দেখাচ্ছে।</div>':'');
- }else{
- html+='<div class="table-wrap"><table><thead><tr><th>Column</th><th>Data Type (ক্লিক করো)</th><th>Rule</th></tr></thead><tbody>'+t.cols.map(c=>'<tr><td><strong>'+escapeHTML(c.name)+'</strong></td><td><button type="button" class="type-inspect" data-coltype="'+escapeHTML(c.type)+'" title="এই data type পরীক্ষা করো">'+escapeHTML(c.type)+' ↗</button></td><td>'+(c.pk?'<span class="pill">PRIMARY KEY</span> ':c.required?'<span class="pill">NOT NULL</span>':'NULL allowed')+'</td></tr>').join('')+'</tbody></table></div>'}
- html+='<div class="note">এটি একটি in-browser simulation; MySQL-এর পূর্ণ বিকল্প নয়।</div>';detail.innerHTML=html;
- for(const button of detail.querySelectorAll('[data-view]'))button.onclick=()=>{view=button.dataset.view;render()};
- for(const button of detail.querySelectorAll('[data-coltype]'))button.onclick=()=>{selectDatatypeByName(button.dataset.coltype);$('datatype-academy').scrollIntoView({behavior:'smooth',block:'start'})}
-}
-function run(){const sql=$('sql-input').value.trim();if(!sql){showResult(false,'Query খালি আছে।','প্রথমে একটি SQL Query লিখো অথবা উপরের উদাহরণ বেছে নাও।');return}
- let statements;try{statements=splitSQL(sql,';')}catch(err){showResult(false,err.message,err.hint,sql);logItem(false,err.message,sql);return}
- if(!statements.length){showResult(false,'Query খালি আছে।','একটি SQL কমান্ড লিখো।');return}
- let results=[];for(const stmt of statements){try{let temp=clone(db),out=execOne(temp,stmt);db=temp;if(out.table!==undefined)selected=out.table;if(out.view)view=out.view;lastSelect=out.select?{...out.select,table:selected}:null;results.push(out);logItem(true,out.msg,stmt)}catch(err){render();showResult(false,(results.length?results.length+'টি আগের Query সফল হয়েছে।\n':'')+err.message,err.hint,stmt);logItem(false,err.message,stmt);return}}
- render();const last=results[results.length-1];showResult(true,results.map((r,i)=>(results.length>1?(i+1)+'. ':'')+r.msg).join('\n'),last.hint,'');
-}
-function loadDemo(){db=Object.create(null);try{execOne(db,'CREATE TABLE Students (id INT PRIMARY KEY, name VARCHAR(50) NOT NULL, gpa DECIMAL(3,2))');execOne(db,"INSERT INTO Students (id, name, gpa) VALUES (1, 'Rahim', 4.75), (2, 'Karim', 4.50), (3, 'Nila', 4.90)")}catch(err){showResult(false,err.message,err.hint);return}selected='students';view='data';lastSelect=null;history=[];$('query-log').innerHTML='<div class="log-empty">ডেমো ডেটা লোড হয়েছে। এখন Query চালিয়ে দেখো।</div>';render();showResult(true,'✅ Students টেবিলে ৩টি ডেমো রেকর্ড লোড হয়েছে।','এখন UPDATE, ALTER, DELETE অথবা SELECT চালিয়ে দেখো।')}
-$('examples').innerHTML=examples.map((e,i)=>'<button type="button" class="query-chip '+(!i?'active':'')+'" data-example="'+i+'"><span class="chip-name">'+e.cmd+'</span><span class="chip-desc">'+e.title+'</span></button>').join('');
-for(const b of $('examples').querySelectorAll('button'))b.onclick=()=>{for(const other of $('examples').querySelectorAll('button'))other.classList.toggle('active',other===b);$('sql-input').value=examples[+b.dataset.example].sql;$('sql-input').focus()};
-$('sql-input').value=examples[0].sql;
-$('run-btn').addEventListener('click',run);$('sql-input').addEventListener('keydown',e=>{if(e.key==='Enter'&&(e.ctrlKey||e.metaKey)){e.preventDefault();run()}});
-$('demo-btn').addEventListener('click',loadDemo);
-$('reset-btn').addEventListener('click',()=>{if(Object.keys(db).length&&!confirm('সব টেবিল ও রেকর্ড Reset করতে চাও?'))return;db=Object.create(null);selected='';view='data';history=[];lastSelect=null;$('query-log').innerHTML='<div class="log-empty">Database রিসেট হয়েছে।</div>';render();showResult(true,'✅ Database Reset হয়েছে।','এখন CREATE দিয়ে আবার শুরু করো।')});
+    <div class="footer">শিক্ষামূলক SQL সিমুলেটর • বাস্তব সার্ভার বা ডেটাবেসে কোনো পরিবর্তন হয় না • SQL-এর নির্বাচিত
+      প্রাথমিক নিয়ম সমর্থন করে</div>
+  </main>
+  <script>
+    (() => {
+      'use strict';
+      const app = document.getElementById('sqlApp');
+      const $ = id => app.querySelector('#' + id);
+      const examples = [
+        {cmd: 'CREATE', title: 'টেবিল তৈরি', sql: "CREATE TABLE Students (\n  id INT PRIMARY KEY,\n  name VARCHAR(50) NOT NULL,\n  gpa DECIMAL(3,2)\n);"},
+        {cmd: 'INSERT', title: 'রেকর্ড যোগ', sql: "INSERT INTO Students (id, name, gpa)\nVALUES (1, 'Rahim', 4.75), (2, 'Karim', 4.50);"},
+        {cmd: 'UPDATE', title: 'তথ্য পরিবর্তন', sql: "UPDATE Students\nSET gpa = 5.00\nWHERE id = 1;"},
+        {cmd: 'ALTER', title: 'কলাম যোগ', sql: "ALTER TABLE Students\nADD COLUMN city VARCHAR(30);"},
+        {cmd: 'DELETE', title: 'রেকর্ড মুছো', sql: "DELETE FROM Students\nWHERE id = 2;"},
+        {cmd: 'DROP', title: 'টেবিল মুছো', sql: "DROP TABLE Students;"}
+      ];
+      let db = Object.create(null), selected = '', view = 'data', history = [], lastSelect = null;
+      const clone = x => JSON.parse(JSON.stringify(x));
+      const key = s => s.toLowerCase();
+      const ident = '[A-Za-z_][A-Za-z0-9_]*';
+      const fail = (s, hint = '') => {const e = new Error(s); e.hint = hint; throw e};
+      const escapeHTML = s => String(s).replace(/[&<>"']/g, c => ({'&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;'}[c]));
+      function splitSQL(str, separator) {const out = []; let buf = '', quote = false, depth = 0; for (let i = 0; i < str.length; i++) {let c = str[i]; if (c === "'") {buf += c; if (quote && str[i + 1] === "'") {buf += str[++i]; continue} quote = !quote; continue} if (!quote) {if (c === '(') depth++; if (c === ')') {depth--; if (depth < 0) fail('বন্ধনী ) অতিরিক্ত দেওয়া হয়েছে।')} if (c === separator && depth === 0) {if (separator === ',' && !buf.trim()) fail('কমার (,) মাঝে একটি অংশ ফাঁকা আছে।'); out.push(buf.trim()); buf = ''; continue} } buf += c} if (quote) fail("স্ট্রিংয়ের শেষের ' (single quote) নেই।", "যেমন: 'Rahim'"); if (depth !== 0) fail('বন্ধনী ( এবং ) সমান সংখ্যায় নেই।'); if (separator === ',' && !buf.trim() && out.length) fail('শেষে অতিরিক্ত কমা (,) দেওয়া হয়েছে।'); if (buf.trim()) out.push(buf.trim()); return out}
+      function literal(raw) {const t = raw.trim(); if (/^NULL$/i.test(t)) return null; if (/^TRUE$/i.test(t)) return true; if (/^FALSE$/i.test(t)) return false; if (/^'(?:[^']|'')*'$/.test(t)) return t.slice(1, -1).replace(/''/g, "'"); if (/^-?\d+(?:\.\d+)?$/.test(t)) return Number(t); fail('ভুল value: ' + t, "টেক্সটের চারপাশে single quote দাও: 'Rahim'")}
+      function parseDef(text) {
+        const m = text.trim().match(new RegExp('^(' + ident + ')\\s+(TINYINT|SMALLINT|INTEGER|INT|BIGINT|FLOAT|DOUBLE|BOOLEAN|BOOL|DATETIME|DATE|TIME|TEXT|VARCHAR\\s*\\(\\s*\\d+\\s*\\)|CHAR\\s*\\(\\s*\\d+\\s*\\)|DECIMAL\\s*\\(\\s*\\d+\\s*,\\s*\\d+\\s*\\))\\s*(.*)$', 'i'));
+        if (!m) fail('কলামের সংজ্ঞা ঠিক নেই: ' + text, 'যেমন: name VARCHAR(50) NOT NULL অথবা id INT PRIMARY KEY');
+        const name = m[1], type = m[2].toUpperCase().replace(/\s+/g, ''), rest = m[3].trim();
+        const pk = /\bPRIMARY\s+KEY\b/i.test(rest), required = pk || /\bNOT\s+NULL\b/i.test(rest);
+        const remainder = rest.replace(/\bPRIMARY\s+KEY\b/ig, '').replace(/\bNOT\s+NULL\b/ig, '').replace(/\bNULL\b/ig, '').trim();
+        if (remainder) fail('অজানা column constraint: ' + remainder, 'এখানে PRIMARY KEY ও NOT NULL ব্যবহার করতে পারো।');
+        if (/^(?:VARCHAR|CHAR)\(0\)$/i.test(type)) fail('VARCHAR/CHAR-এর দৈর্ঘ্য ০ হতে পারে না।');
+        if (/^CHAR\(/.test(type) && +type.match(/\d+/)[0] > 255) fail('CHAR(n)-এ n সর্বোচ্চ 255।');
+        if (/^VARCHAR\(/.test(type) && +type.match(/\d+/)[0] > 65535) fail('এই ল্যাবে VARCHAR(n)-এ n সর্বোচ্চ 65535।');
+        if (/^DECIMAL\(/.test(type)) {const match = type.match(/\((\d+),(\d+)\)/); if (+match[2] > +match[1] || +match[1] === 0 || +match[1] > 65 || +match[2] > 30) fail('DECIMAL(M,D)-এ 1≤M≤65 এবং 0≤D≤30, আর D≤M হতে হবে।')}
+        return {name, key: key(name), type, required, pk}
+      }
+      function getTable(store, name) {const t = store[key(name)]; if (!t) fail('“' + name + '” নামে টেবিল নেই।', 'আগে CREATE TABLE দিয়ে টেবিল তৈরি করো অথবা 📦 ডেমো ডেটা লোড করো।'); return t}
+      function getCol(t, name) {const c = t.cols.find(x => x.key === key(name)); if (!c) fail('“' + name + '” কলামটি ' + t.name + ' টেবিলে নেই।', 'Database Explorer → গঠন ট্যাবে কলামগুলো দেখো।'); return c}
+      function validDateString(value) {
+        const m = String(value).match(/^(\d{4})-(\d{2})-(\d{2})$/); if (!m) return false;
+        const y = +m[1], mo = +m[2], d = +m[3]; if (y < 1000 || y > 9999 || mo < 1 || mo > 12 || d < 1) return false;
+        const leap = y % 4 === 0 && (y % 100 !== 0 || y % 400 === 0);
+        return d <= [31, leap ? 29 : 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31][mo - 1]
+      }
+      function validTimeString(value) {const m = String(value).match(/^(\d{2}):(\d{2}):(\d{2})$/); return !!m && +m[1] <= 23 && +m[2] <= 59 && +m[3] <= 59}
+      function checkType(c, v) {
+        if (v === null) {if (c.required) fail(c.name + ' কলামে NULL রাখা যাবে না (NOT NULL / PRIMARY KEY)।'); return v}
+        const t = c.type;
+        if (/^(TINYINT|SMALLINT|INT|INTEGER|BIGINT)$/.test(t)) {
+          if (typeof v !== 'number' || !Number.isSafeInteger(v)) fail(c.name + ' (' + t + ') কলামে পূর্ণসংখ্যা দিতে হবে।', 'যেমন: 25 বা -3 — দশমিক/quoted text নয়।');
+          const ranges = {TINYINT: [-128, 127], SMALLINT: [-32768, 32767], INT: [-2147483648, 2147483647], INTEGER: [-2147483648, 2147483647]};
+          if (ranges[t] && (v < ranges[t][0] || v > ranges[t][1])) fail(c.name + ' (' + t + ')-এর সীমা ' + ranges[t][0] + ' থেকে ' + ranges[t][1] + '।');
+          return v
+        }
+        if (/^(FLOAT|DOUBLE|DECIMAL)/.test(t)) {
+          if (typeof v !== 'number' || !Number.isFinite(v)) fail(c.name + ' (' + t + ') কলামে সংখ্যা দিতে হবে।', 'যেমন: 4.75 — টেক্সটের মতো quote দেবে না।');
+          if (t.startsWith('DECIMAL')) {
+            const [p, d] = t.match(/\d+/g).map(Number), repr = String(Math.abs(v));
+            if (repr.includes('e')) fail(c.name + ' কলামে ' + t + '-এর সীমার বাইরে সংখ্যা।');
+            const parts = repr.split('.'), integerDigits = parts[0].replace(/^0+/, '').length, fractionDigits = (parts[1] || '').length;
+            if (integerDigits > p - d || fractionDigits > d) fail(c.name + ' কলামে ' + t + ' অনুযায়ী সংখ্যা দাও।', 'মোট সর্বোচ্চ ' + p + 'টি অঙ্ক; দশমিকের পরে সর্বোচ্চ ' + d + 'টি। যেমন: DECIMAL(5,2)-এ 123.45 গ্রহণযোগ্য, 1234.56 নয়।');
+          }
+          return v
+        }
+        if (/^(VARCHAR|CHAR|TEXT)/.test(t)) {
+          if (typeof v !== 'string') fail(c.name + ' (' + t + ') কলামে টেক্সট দিতে single quote ব্যবহার করো।', "যেমন: 'Rahim'");
+          const limit = t.match(/\((\d+)\)/); if (limit && Array.from(v).length > +limit[1]) fail(c.name + ' কলামের সর্বোচ্চ দৈর্ঘ্য ' + limit[1] + ' অক্ষর।', "যেমন: VARCHAR(5)-এ 'Rafi' চলে, 'Bangladesh' চলে না।"); return v
+        }
+        if (t === 'DATE') {
+          if (typeof v !== 'string' || !validDateString(v)) fail(c.name + " কলামে DATE লিখতে হবে 'YYYY-MM-DD' আকারে ও বৈধ তারিখ হতে হবে।", "যেমন: '2026-11-05' ঠিক, '2026-02-30' ভুল।"); return v
+        }
+        if (t === 'TIME') {
+          if (typeof v !== 'string' || !validTimeString(v)) fail(c.name + " কলামে TIME লিখতে হবে 'HH:MM:SS' আকারে।", "যেমন: '14:30:05' ঠিক, '25:70:00' ভুল।"); return v
+        }
+        if (t === 'DATETIME') {
+          if (typeof v !== 'string' || !/^\d{4}-\d{2}-\d{2} \d{2}:\d{2}:\d{2}$/.test(v) || !validDateString(v.slice(0, 10)) || !validTimeString(v.slice(11))) fail(c.name + " কলামে DATETIME লিখবে 'YYYY-MM-DD HH:MM:SS' আকারে।", "যেমন: '2026-11-05 14:30:05'"); return v
+        }
+        if (t === 'BOOLEAN' || t === 'BOOL') {
+          if (v === true || v === 1) return true;
+          if (v === false || v === 0) return false;
+          fail(c.name + ' কলামে TRUE/FALSE অথবা 1/0 দিতে হবে।', "যেমন: TRUE অথবা 0 — 'Yes' নয়।")
+        }
+        return v
+      }
+      function validateRows(t, rows) {const pks = t.cols.filter(c => c.pk); for (const row of rows) {for (const c of t.cols) {row[c.key] = checkType(c, row[c.key] === undefined ? null : row[c.key])} } if (pks.length) {const keys = new Set(); for (const r of rows) {const signature = JSON.stringify(pks.map(c => r[c.key])); if (keys.has(signature)) fail('PRIMARY KEY-এর মান একই দুই রেকর্ডে দেওয়া যায় না।', 'প্রতিটি রেকর্ডের id আলাদা রাখো।'); keys.add(signature)} } }
+      function whereFilter(t, raw) {if (!raw) return () => true; const conditions = raw.split(/\s+AND\s+/i).map(s => s.trim()); const checks = conditions.map(cond => {let isn = cond.match(new RegExp('^(' + ident + ')\\s+IS\\s+(NOT\\s+)?NULL$', 'i')); if (isn) {const col = getCol(t, isn[1]); return row => isn[2] ? row[col.key] !== null : row[col.key] === null} let m = cond.match(new RegExp('^(' + ident + ')\\s*(>=|<=|<>|!=|=|>|<)\\s*(.+)$', 'i')); if (!m) fail('WHERE শর্তটি সঠিক নয়: ' + cond, 'যেমন: WHERE id = 1 অথবা WHERE gpa >= 4.5'); const c = getCol(t, m[1]), v = literal(m[3]), op = m[2]; return row => {const a = row[c.key]; if (a === null || v === null) return false; if (op === '=') return a === v; if (op === '!=' || op === '<>') return a !== v; if (op === '>') return a > v; if (op === '<') return a < v; if (op === '>=') return a >= v; return a <= v}}); return row => checks.every(fn => fn(row))}
+      function execOne(store, query) {
+        let m, t, s = query.trim();
+        if (/^CREATE\b/i.test(s)) {
+          m = s.match(new RegExp('^CREATE\\s+TABLE\\s+(' + ident + ')\\s*\\(([\\s\\S]*)\\)$', 'i'));
+          if (!m) fail('CREATE TABLE-এর syntax ভুল।', 'যেমন: CREATE TABLE Students (id INT PRIMARY KEY, name VARCHAR(50));');
+          if (store[key(m[1])]) fail('“' + m[1] + '” টেবিলটি আগে থেকেই আছে।', 'নতুন নাম ব্যবহার করো অথবা পুরোনো টেবিল DROP করো।');
+          const parts = splitSQL(m[2], ','), cols = []; let tablePk = []; if (!parts.length) fail('টেবিলে অন্তত একটি কলাম থাকতে হবে।');
+          for (const part of parts) {let p = part.match(new RegExp('^PRIMARY\\s+KEY\\s*\\(\\s*(' + ident + ')\\s*\\)$', 'i')); if (p) {tablePk.push(key(p[1])); continue} let col = parseDef(part); if (cols.some(c => c.key === col.key)) fail('একই কলাম দুইবার: ' + col.name); cols.push(col)}
+          if (!cols.length) fail('টেবিলে অন্তত একটি কলাম থাকতে হবে।');
+          for (const pk of tablePk) {const col = cols.find(c => c.key === pk); if (!col) fail('PRIMARY KEY যে কলামে দেওয়া হয়েছে সেটি নেই: ' + pk); col.pk = true; col.required = true}
+          if (cols.filter(c => c.pk).length > 1) fail('এই প্রাথমিক সিমুলেটরে একটি PRIMARY KEY কলাম সমর্থিত।');
+          store[key(m[1])] = {name: m[1], cols, rows: []}; return {msg: '✅ ' + m[1] + ' নামে নতুন টেবিল তৈরি হয়েছে।', hint: cols.length + 'টি কলাম তৈরি হয়েছে। ডান পাশে গঠন ট্যাবে দেখো।', table: key(m[1])}
+        }
+        if (/^INSERT\b/i.test(s)) {
+          m = s.match(new RegExp('^INSERT\\s+INTO\\s+(' + ident + ')\\s*(?:\\(([^()]*)\\))?\\s+VALUES\\s+([\\s\\S]+)$', 'i'));
+          if (!m) fail('INSERT INTO-এর syntax ভুল।', "যেমন: INSERT INTO Students (id, name) VALUES (1, 'Rahim');");
+          t = getTable(store, m[1]); let cols = m[2] !== undefined ? splitSQL(m[2], ',').map(x => getCol(t, x)) : t.cols;
+          if (!cols.length || new Set(cols.map(x => x.key)).size !== cols.length) fail('INSERT-এর কলামের তালিকা ভুল বা একই কলাম দুইবার।');
+          const groups = splitSQL(m[3], ','); if (!groups.length) fail('VALUES-এ অন্তত একটি রেকর্ড লাগবে।'); const inserted = [];
+          for (const group of groups) {if (!/^\([\s\S]*\)$/.test(group)) fail('VALUES-এর প্রতিটি রেকর্ড ( ... ) বন্ধনীতে লিখো।'); const vals = splitSQL(group.slice(1, -1), ',').map(literal); if (vals.length !== cols.length) fail('কলামের সংখ্যা (' + cols.length + ') এবং value-এর সংখ্যা (' + vals.length + ') সমান নয়।'); let r = Object.fromEntries(t.cols.map(c => [c.key, null])); cols.forEach((c, i) => r[c.key] = vals[i]); inserted.push(r)}
+          validateRows(t, [...t.rows, ...inserted]); t.rows.push(...inserted); return {msg: '✅ ' + inserted.length + 'টি নতুন রেকর্ড যোগ হয়েছে।', hint: 'INSERT টেবিলের গঠন পরিবর্তন করে না; নতুন row যোগ করে।', table: key(m[1])}
+        }
+        if (/^UPDATE\b/i.test(s)) {
+          m = s.match(new RegExp('^UPDATE\\s+(' + ident + ')\\s+SET\\s+([\\s\\S]+?)(?:\\s+WHERE\\s+([\\s\\S]+))?$', 'i'));
+          if (!m) fail('UPDATE-এর syntax ভুল।', 'যেমন: UPDATE Students SET gpa = 5.00 WHERE id = 1;');
+          t = getTable(store, m[1]); const changes = splitSQL(m[2], ',').map(part => {let a = part.match(new RegExp('^(' + ident + ')\\s*=\\s*([\\s\\S]+)$', 'i')); if (!a) fail('SET লেখার নিয়ম: column = value'); const c = getCol(t, a[1]); return [c, literal(a[2])]});
+          if (!changes.length || new Set(changes.map(x => x[0].key)).size !== changes.length) fail('SET-এর কলাম একাধিকবার লিখো না।'); const test = whereFilter(t, m[3]); let count = 0;
+          for (const row of t.rows) if (test(row)) {for (const [c, v] of changes) row[c.key] = v; count++} validateRows(t, t.rows);
+          return {msg: '✅ ' + count + 'টি রেকর্ড UPDATE হয়েছে।', hint: m[3] ? 'WHERE শর্ত মিলে এমন রেকর্ডগুলো পরিবর্তিত হয়েছে।' : '⚠️ WHERE নেই: টেবিলের সব রেকর্ডে UPDATE প্রয়োগ করা হয়েছে।', table: key(m[1])}
+        }
+        if (/^DELETE\b/i.test(s)) {
+          m = s.match(new RegExp('^DELETE\\s+FROM\\s+(' + ident + ')(?:\\s+WHERE\\s+([\\s\\S]+))?$', 'i'));
+          if (!m) fail('DELETE-এর syntax ভুল।', 'যেমন: DELETE FROM Students WHERE id = 2;');
+          t = getTable(store, m[1]); const test = whereFilter(t, m[2]), before = t.rows.length; t.rows = t.rows.filter(row => !test(row)); return {msg: '✅ ' + (before - t.rows.length) + 'টি রেকর্ড মুছে গেছে।', hint: m[2] ? 'টেবিলটি আছে; শুধু শর্ত মেলা রেকর্ডগুলো মুছে গেছে।' : '⚠️ WHERE নেই: সব রেকর্ড মুছে গেছে, কিন্তু টেবিলটি রয়ে গেছে।', table: key(m[1])}
+        }
+        if (/^DROP\b/i.test(s)) {
+          m = s.match(new RegExp('^DROP\\s+TABLE\\s+(IF\\s+EXISTS\\s+)?(' + ident + ')$', 'i'));
+          if (!m) fail('DROP TABLE-এর syntax ভুল।', 'যেমন: DROP TABLE Students;');
+          if (!store[key(m[2])] && m[1]) return {msg: 'ℹ️ টেবিল ছিল না; IF EXISTS থাকার কারণে Error হয়নি।', hint: 'কোনো পরিবর্তন হয়নি।'};
+          t = getTable(store, m[2]); delete store[key(m[2])]; return {msg: '✅ ' + t.name + ' টেবিলটি DROP হয়েছে।', hint: 'টেবিলের গঠন ও সব রেকর্ড একসাথে মুছে গেছে।', table: ''}
+        }
+        if (/^ALTER\b/i.test(s)) {
+          m = s.match(new RegExp('^ALTER\\s+TABLE\\s+(' + ident + ')\\s+([\\s\\S]+)$', 'i')); if (!m) fail('ALTER TABLE-এর syntax ভুল।', 'যেমন: ALTER TABLE Students ADD COLUMN city VARCHAR(30);');
+          t = getTable(store, m[1]); const operation = m[2].trim(); let a;
+          if ((a = operation.match(/^ADD\s+(?:COLUMN\s+)?([\s\S]+)$/i))) {const c = parseDef(a[1]); if (t.cols.some(x => x.key === c.key)) fail(c.name + ' কলামটি আগে থেকেই আছে।'); if (c.required && t.rows.length) fail('রেকর্ড থাকা টেবিলে সরাসরি NOT NULL কলাম যোগ করা যাবে না।', 'আগে nullable কলাম যোগ করো।'); t.cols.push(c); t.rows.forEach(row => row[c.key] = null); validateRows(t, t.rows); return {msg: '✅ ' + c.name + ' কলাম যোগ হয়েছে।', hint: 'পুরোনো রেকর্ডগুলোর নতুন কলামে NULL দেখাবে।', table: key(m[1]), view: 'structure'}}
+          if ((a = operation.match(new RegExp('^DROP\\s+(?:COLUMN\\s+)?(' + ident + ')$', 'i')))) {const c = getCol(t, a[1]); if (t.cols.length === 1) fail('টেবিলের একমাত্র কলাম DROP করা যাবে না।'); t.cols = t.cols.filter(x => x.key !== c.key); t.rows.forEach(row => delete row[c.key]); return {msg: '✅ ' + c.name + ' কলাম মুছে গেছে।', hint: 'ALTER DROP COLUMN করলে কলাম ও সেই কলামের তথ্য মুছে যায়।', table: key(m[1]), view: 'structure'}}
+          if ((a = operation.match(/^MODIFY\s+(?:COLUMN\s+)?([\s\S]+)$/i))) {const c = parseDef(a[1]); const old = getCol(t, c.name); c.pk = old.pk; c.required = c.required || old.pk; t.cols[t.cols.indexOf(old)] = c; validateRows(t, t.rows); return {msg: '✅ ' + c.name + ' কলামের ধরন/নিয়ম বদলেছে।', hint: 'ALTER MODIFY টেবিলের গঠন পরিবর্তন করে।', table: key(m[1]), view: 'structure'}}
+          if ((a = operation.match(new RegExp('^RENAME\\s+COLUMN\\s+(' + ident + ')\\s+TO\\s+(' + ident + ')$', 'i')))) {const old = getCol(t, a[1]); if (t.cols.some(c => c.key === key(a[2]))) fail('নতুন কলাম নামটি আগে থেকেই আছে।'); const previous = old.key; old.name = a[2]; old.key = key(a[2]); t.rows.forEach(row => {row[old.key] = row[previous]; delete row[previous]}); return {msg: '✅ কলামের নাম ' + a[1] + ' থেকে ' + a[2] + ' হয়েছে।', table: key(m[1]), view: 'structure'}}
+          if ((a = operation.match(new RegExp('^RENAME\\s+(?:TO\\s+)?(' + ident + ')$', 'i')))) {const newK = key(a[1]); if (store[newK] && newK !== key(t.name)) fail('নতুন টেবিল নামটি আগে থেকেই আছে।'); delete store[key(t.name)]; t.name = a[1]; store[newK] = t; return {msg: '✅ টেবিলের নাম ' + m[1] + ' থেকে ' + a[1] + ' হয়েছে।', table: newK}}
+          fail('ALTER TABLE-এর এই কাজটি সমর্থিত নয়।', 'ADD COLUMN, DROP COLUMN, MODIFY COLUMN, RENAME COLUMN অথবা RENAME TO ব্যবহার করো।')
+        }
+        if (/^SELECT\b/i.test(s)) {
+          m = s.match(new RegExp('^SELECT\\s+([\\s\\S]+?)\\s+FROM\\s+(' + ident + ')(?:\\s+WHERE\\s+([\\s\\S]+))?$', 'i'));
+          if (!m) fail('SELECT-এর syntax ভুল।', 'যেমন: SELECT * FROM Students;'); t = getTable(store, m[2]); const cols = m[1].trim() === '*' ? t.cols : splitSQL(m[1], ',').map(c => getCol(t, c)); const test = whereFilter(t, m[3]); const found = t.rows.filter(test).map(r => Object.fromEntries(cols.map(c => [c.key, r[c.key]]))); return {msg: '✅ SELECT-এ ' + found.length + 'টি রেকর্ড পাওয়া গেছে।', hint: 'SELECT ডেটা পরিবর্তন করে না; শুধু দেখায়।', table: key(m[2]), view: 'data', select: {cols, rows: found}}
+        }
+        fail('কমান্ডটি সঠিক বা সমর্থিত নয়।', 'CREATE, INSERT, UPDATE, ALTER, DELETE, DROP বা SELECT দিয়ে শুরু করো।')
+      }
+      function showResult(ok, msg, hint, code) {const node = $('result'); node.className = 'console-result ' + (ok ? 'good' : 'bad'); node.innerHTML = '<div class="result-title">' + (ok ? 'সফলভাবে Query চলেছে' : '❌ Query Error') + '</div><div class="result-msg">' + escapeHTML(msg) + '</div>' + (hint ? '<div class="result-hint">' + escapeHTML(hint) + '</div>' : '') + (code ? '<span class="result-code">' + escapeHTML(code) + '</span>' : '')}
+      function logItem(ok, msg, query) {history.unshift({ok, msg, query}); history = history.slice(0, 14); $('query-log').innerHTML = history.map(x => '<div class="log-item ' + (x.ok ? '' : 'err') + '"><strong>' + (x.ok ? '✓ ' : '✕ ') + escapeHTML(x.msg.replace(/^[✅ℹ️]\s*/, '')) + '</strong><small>' + escapeHTML(x.query.slice(0, 105)) + '</small></div>').join('')}
+      function render() {
+        const names = Object.keys(db).sort(); $('stat-tables').textContent = names.length; $('stat-rows').textContent = names.reduce((n, k) => n + db[k].rows.length, 0); $('db-state').textContent = names.length ? 'Database connected ✓' : 'Empty database';
+        if (!db[selected]) selected = names[0] || '';
+        $('table-list').innerHTML = names.length ? names.map(k => '<button type="button" class="table-tab ' + (k === selected ? 'selected' : '') + '" data-table="' + escapeHTML(k) + '">▤ ' + escapeHTML(db[k].name) + ' <small>' + db[k].rows.length + '</small></button>').join('') : '<span class="empty-tabs">এখনো কোনো টেবিল নেই</span>';
+        for (const button of $('table-list').querySelectorAll('button')) button.onclick = () => {selected = button.dataset.table; lastSelect = null; render()};
+        const detail = $('table-detail'); if (!selected) {detail.innerHTML = '<div class="empty-db"><div class="illustration">▤</div><strong>তোমার Database খালি</strong><p>CREATE TABLE Query চালালে এখানে নতুন টেবিলটি দেখতে পাবে।</p></div>'; return }
+        const t = db[selected], selectOn = lastSelect && lastSelect.table === selected; const cols = selectOn ? lastSelect.cols : t.cols, rows = selectOn ? lastSelect.rows : t.rows;
+        let html = '<div class="detail-top"><h3>▤ ' + escapeHTML(t.name) + ' <small style="font-size:11px;color:#8c97a8;font-weight:500">(' + t.rows.length + ' records)</small></h3><div class="switch"><button type="button" data-view="data" class="' + (view === 'data' ? 'active' : '') + '">ডেটা</button><button type="button" data-view="structure" class="' + (view === 'structure' ? 'active' : '') + '">গঠন</button></div></div>';
+        if (view === 'data') {
+          html += '<div class="table-wrap"><table><thead><tr>' + cols.map(c => '<th>' + escapeHTML(c.name) + '</th>').join('') + '</tr></thead><tbody>';
+          if (!rows.length) html += '<tr><td colspan="' + Math.max(1, cols.length) + '" class="no-rows">কোনো রেকর্ড নেই — INSERT দিয়ে যোগ করো</td></tr>';
+          else html += rows.slice(0, 300).map(r => '<tr>' + cols.map(c => '<td>' + (r[c.key] === null || r[c.key] === undefined ? '<span class="null">NULL</span>' : escapeHTML(String(r[c.key]))) + '</td>').join('') + '</tr>').join(''); html += '</tbody></table></div>' + (rows.length > 300 ? '<div class="note">প্রথম ৩০০টি রেকর্ড দেখানো হচ্ছে।</div>' : '') + (selectOn ? '<div class="note">SELECT Query অনুযায়ী বাছাই করা ফলাফল দেখাচ্ছে।</div>' : '');
+        } else {
+          html += '<div class="table-wrap"><table><thead><tr><th>Column</th><th>Data Type (ক্লিক করো)</th><th>Rule</th></tr></thead><tbody>' + t.cols.map(c => '<tr><td><strong>' + escapeHTML(c.name) + '</strong></td><td><button type="button" class="type-inspect" data-coltype="' + escapeHTML(c.type) + '" title="এই data type পরীক্ষা করো">' + escapeHTML(c.type) + ' ↗</button></td><td>' + (c.pk ? '<span class="pill">PRIMARY KEY</span> ' : c.required ? '<span class="pill">NOT NULL</span>' : 'NULL allowed') + '</td></tr>').join('') + '</tbody></table></div>'
+        }
+        html += '<div class="note">এটি একটি in-browser simulation; MySQL-এর পূর্ণ বিকল্প নয়।</div>'; detail.innerHTML = html;
+        for (const button of detail.querySelectorAll('[data-view]')) button.onclick = () => {view = button.dataset.view; render()};
+        for (const button of detail.querySelectorAll('[data-coltype]')) button.onclick = () => {selectDatatypeByName(button.dataset.coltype); $('datatype-academy').scrollIntoView({behavior: 'smooth', block: 'start'})}
+      }
+      function run() {
+        const sql = $('sql-input').value.trim(); if (!sql) {showResult(false, 'Query খালি আছে।', 'প্রথমে একটি SQL Query লিখো অথবা উপরের উদাহরণ বেছে নাও।'); return }
+        let statements; try {statements = splitSQL(sql, ';')} catch (err) {showResult(false, err.message, err.hint, sql); logItem(false, err.message, sql); return }
+        if (!statements.length) {showResult(false, 'Query খালি আছে।', 'একটি SQL কমান্ড লিখো।'); return }
+        let results = []; for (const stmt of statements) {try {let temp = clone(db), out = execOne(temp, stmt); db = temp; if (out.table !== undefined) selected = out.table; if (out.view) view = out.view; lastSelect = out.select ? {...out.select, table: selected} : null; results.push(out); logItem(true, out.msg, stmt)} catch (err) {render(); showResult(false, (results.length ? results.length + 'টি আগের Query সফল হয়েছে।\n' : '') + err.message, err.hint, stmt); logItem(false, err.message, stmt); return } }
+        render(); const last = results[results.length - 1]; showResult(true, results.map((r, i) => (results.length > 1 ? (i + 1) + '. ' : '') + r.msg).join('\n'), last.hint, '');
+      }
+      function loadDemo() {db = Object.create(null); try {execOne(db, 'CREATE TABLE Students (id INT PRIMARY KEY, name VARCHAR(50) NOT NULL, gpa DECIMAL(3,2))'); execOne(db, "INSERT INTO Students (id, name, gpa) VALUES (1, 'Rahim', 4.75), (2, 'Karim', 4.50), (3, 'Nila', 4.90)")} catch (err) {showResult(false, err.message, err.hint); return } selected = 'students'; view = 'data'; lastSelect = null; history = []; $('query-log').innerHTML = '<div class="log-empty">ডেমো ডেটা লোড হয়েছে। এখন Query চালিয়ে দেখো।</div>'; render(); showResult(true, '✅ Students টেবিলে ৩টি ডেমো রেকর্ড লোড হয়েছে।', 'এখন UPDATE, ALTER, DELETE অথবা SELECT চালিয়ে দেখো।')}
+      $('examples').innerHTML = examples.map((e, i) => '<button type="button" class="query-chip ' + (!i ? 'active' : '') + '" data-example="' + i + '"><span class="chip-name">' + e.cmd + '</span><span class="chip-desc">' + e.title + '</span></button>').join('');
+      for (const b of $('examples').querySelectorAll('button')) b.onclick = () => {for (const other of $('examples').querySelectorAll('button')) other.classList.toggle('active', other === b); $('sql-input').value = examples[+b.dataset.example].sql; $('sql-input').focus()};
+      $('sql-input').value = examples[0].sql;
+      $('run-btn').addEventListener('click', run); $('sql-input').addEventListener('keydown', e => {if (e.key === 'Enter' && (e.ctrlKey || e.metaKey)) {e.preventDefault(); run()} });
+      $('demo-btn').addEventListener('click', loadDemo);
+      $('reset-btn').addEventListener('click', () => {if (Object.keys(db).length && !confirm('সব টেবিল ও রেকর্ড Reset করতে চাও?')) return; db = Object.create(null); selected = ''; view = 'data'; history = []; lastSelect = null; $('query-log').innerHTML = '<div class="log-empty">Database রিসেট হয়েছে।</div>'; render(); showResult(true, '✅ Database Reset হয়েছে।', 'এখন CREATE দিয়ে আবার শুরু করো।')});
 
-// Data Type শেখার গাইড এবং interactive value checker
-const datatypeList=[
- {type:'TINYINT',kind:'সংখ্যা',desc:'খুব ছোট পূর্ণসংখ্যা: -128 থেকে 127।',good:'120',bad:'128'},
- {type:'SMALLINT',kind:'সংখ্যা',desc:'ছোট পূর্ণসংখ্যা: -32768 থেকে 32767।',good:'32000',bad:'40000'},
- {type:'INT',kind:'সংখ্যা',desc:'পূর্ণসংখ্যা, যেমন বয়স, রোল, নম্বর।',good:'25',bad:'12.5'},
- {type:'BIGINT',kind:'সংখ্যা',desc:'অনেক বড় পূর্ণসংখ্যা; এই ল্যাবে নিরাপদ পূর্ণসংখ্যা পর্যন্ত।',good:'9000000000',bad:"'Big Number'"},
- {type:'DECIMAL(5,2)',kind:'সংখ্যা',desc:'মোট ৫ অঙ্ক, দশমিকের পরে সর্বোচ্চ ২ অঙ্ক।',good:'123.45',bad:'1234.56'},
- {type:'FLOAT',kind:'সংখ্যা',desc:'আনুমানিক দশমিক সংখ্যা, যেমন 4.75।',good:'4.75',bad:"'four'"},
- {type:'DOUBLE',kind:'সংখ্যা',desc:'FLOAT-এর তুলনায় বেশি সূক্ষ্ম দশমিক সংখ্যা।',good:'3.1415926',bad:"'3.14'"},
- {type:'CHAR(3)',kind:'লেখা',desc:'নির্দিষ্ট দৈর্ঘ্যের অক্ষর; ছোট কোডের জন্য।',good:"'ABC'",bad:"'ABCD'"},
- {type:'VARCHAR(5)',kind:'লেখা',desc:'সর্বোচ্চ ৫টি অক্ষরের পরিবর্তনশীল লেখা।',good:"'Rafi'",bad:"'Bangladesh'"},
- {type:'TEXT',kind:'লেখা',desc:'লম্বা লেখা, মন্তব্য বা ঠিকানা।',good:"'Hello, Bangladesh!'",bad:'123'},
- {type:'DATE',kind:'তারিখ–সময়',desc:'ক্যালেন্ডারের তারিখ: YYYY-MM-DD।',good:"'2026-11-05'",bad:"'2026-02-30'"},
- {type:'TIME',kind:'তারিখ–সময়',desc:'এই ল্যাবে সময়: HH:MM:SS (২৪ ঘণ্টা ঘড়ি)।',good:"'14:30:05'",bad:"'25:70:00'"},
- {type:'DATETIME',kind:'তারিখ–সময়',desc:'তারিখ ও সময় একসঙ্গে।',good:"'2026-11-05 14:30:05'",bad:"'2026-11-05'"},
- {type:'BOOLEAN',kind:'সত্য–মিথ্যা',desc:'সত্য/মিথ্যা: TRUE, FALSE, 1, 0।',good:'TRUE',bad:"'Yes'"}
-];
-let activeDatatype='VARCHAR(5)',activeDatatypeFilter='সব';
-const datatypeKinds=['সব','সংখ্যা','লেখা','তারিখ–সময়','সত্য–মিথ্যা'];
-function exampleForType(name){
- const found=datatypeList.find(x=>x.type.toUpperCase()===name.toUpperCase());if(found)return found;
- if(/^VARCHAR\(\d+\)$/i.test(name)||/^CHAR\(\d+\)$/i.test(name)){
-  const length=+(name.match(/\d+/)||[])[0];return {type:name,kind:'লেখা',desc:'নিজের বাছাই করা দৈর্ঘ্য অনুযায়ী টেক্সট।',good:"'"+'A'.repeat(Math.max(1,Math.min(length,5)))+"'",bad:"'"+'B'.repeat(Math.max(2,Math.min(length+1,20)))+"'"}
- }
- if(/^DECIMAL\(\d+,\d+\)$/i.test(name))return {type:name,kind:'সংখ্যা',desc:'নির্দিষ্ট precision ও scale-এর দশমিক।',good:'0',bad:"'abc'"};
- if(/^(INTEGER|BOOL)$/i.test(name)){const base=datatypeList.find(x=>x.type===(name.toUpperCase()==='INTEGER'?'INT':'BOOLEAN'));return {...base,type:name}}
- return {type:name,kind:'নিজস্ব',desc:'নিজের Data Type দিয়ে পরীক্ষা করো।',good:'1',bad:"'abc'"}
-}
-function showDatatypeCards(){
- $('dtype-filters').innerHTML=datatypeKinds.map(k=>'<button type="button" class="dtype-filter '+(k===activeDatatypeFilter?'active':'')+'" data-kind="'+escapeHTML(k)+'">'+escapeHTML(k)+'</button>').join('');
- $('dtype-grid').innerHTML=datatypeList.filter(x=>activeDatatypeFilter==='সব'||x.kind===activeDatatypeFilter).map(x=>'<button type="button" class="dtype-card '+(x.type===activeDatatype?'selected':'')+'" data-dtype="'+escapeHTML(x.type)+'"><span class="dtype-top"><span class="dtype-title">'+escapeHTML(x.type)+'</span><span class="dtype-kind">'+escapeHTML(x.kind)+'</span></span><span class="dtype-descr">'+escapeHTML(x.desc)+'</span><span class="dtype-sample"><em>✓ ঠিক</em> <code>'+escapeHTML(x.good)+'</code></span><span class="dtype-sample invalid"><em>✕ ভুল</em> <code>'+escapeHTML(x.bad)+'</code></span><span class="dtype-bottom">পরীক্ষা করো ↗</span>'+(x.type===activeDatatype?'<span class="dtype-card-result">✓ <code>'+escapeHTML(x.good)+'</code> — গ্রহণযোগ্য উদাহরণ। অন্য মানও উপরে পরীক্ষা করো।</span>':'')+'</button>').join('');
- for(const btn of $('dtype-grid').querySelectorAll('[data-dtype]'))btn.onclick=()=>selectDatatypeByName(btn.dataset.dtype);
- for(const btn of $('dtype-filters').querySelectorAll('[data-kind]'))btn.onclick=()=>{activeDatatypeFilter=btn.dataset.kind;showDatatypeCards()}
-}
-function selectDatatypeByName(name){
- const item=exampleForType(name);activeDatatype=item.type;
- $('dtype-type-input').value=item.type;$('dtype-value-input').value=item.good;
- if(!datatypeList.some(x=>x.type===name)){activeDatatypeFilter='সব'}else if(activeDatatypeFilter!=='সব'&&!datatypeList.some(x=>x.type===name&&x.kind===activeDatatypeFilter))activeDatatypeFilter='সব';
- showDatatypeCards();showTypeCheck()
-}
-function showTypeCheck(){
- const typeName=$('dtype-type-input').value.trim().toUpperCase().replace(/\s+/g,'');const inputValue=$('dtype-value-input').value.trim();
- const out=$('dtype-check-result');
- try{
-  if(!typeName)fail('Data Type খালি আছে।','যেমন: INT বা VARCHAR(5)');
-  if(!inputValue)fail('SQL Value খালি আছে।',"যেমন: 25 বা 'Rafi'");
-  const c=parseDef('sample_value '+typeName),v=literal(inputValue),checked=checkType(c,v);
-  out.className='dtype-check-result ok';
-  out.innerHTML='<strong>✅ গ্রহণযোগ্য মান!</strong><p><code>'+escapeHTML(inputValue)+'</code> → <b>'+escapeHTML(typeName)+'</b> ঠিক আছে।'+(checked===null?' কলাম NOT NULL না হলে NULL রাখা যায়।':'')+'</p>';
- }catch(error){out.className='dtype-check-result error';out.innerHTML='<strong>❌ গ্রহণযোগ্য নয়</strong><p>'+escapeHTML(error.message)+(error.hint?' '+escapeHTML(error.hint):'')+'</p>'}
- updateTypeSQLPreview()
-}
-function updateTypeSQLPreview(){
- const t=$('dtype-type-input').value.trim().toUpperCase().replace(/\s+/g,'')||'VARCHAR(5)';
- const value=$('dtype-value-input').value.trim()||"'Rafi'";
- const code='DROP TABLE IF EXISTS TypePractice;\nCREATE TABLE TypePractice (\n  id INT PRIMARY KEY,\n  sample_value '+t+'\n);\nINSERT INTO TypePractice (id, sample_value) VALUES (1, '+value+');';
- $('dtype-sql-preview').textContent=code;return code
-}
-$('dtype-check-btn').addEventListener('click',showTypeCheck);
-for(const id of ['dtype-type-input','dtype-value-input']){
- $(id).addEventListener('input',updateTypeSQLPreview);
- $(id).addEventListener('keydown',e=>{if(e.key==='Enter'){e.preventDefault();showTypeCheck()}})
-}
-$('dtype-correct-btn').addEventListener('click',()=>{const type=$('dtype-type-input').value.trim().toUpperCase().replace(/\s+/g,'');$('dtype-value-input').value=exampleForType(type).good;showTypeCheck()});
-$('dtype-wrong-btn').addEventListener('click',()=>{const type=$('dtype-type-input').value.trim().toUpperCase().replace(/\s+/g,'');$('dtype-value-input').value=exampleForType(type).bad;showTypeCheck()});
-$('dtype-to-editor').addEventListener('click',()=>{const sql=updateTypeSQLPreview();$('sql-input').value=sql;for(const b of $('examples').querySelectorAll('button'))b.classList.remove('active');$('sql-input').scrollIntoView({behavior:'smooth',block:'center'});$('sql-input').focus()});
-showDatatypeCards();updateTypeSQLPreview();
-render();
-})();
-</script>
+      // Data Type শেখার গাইড এবং interactive value checker
+      const datatypeList = [
+        {type: 'TINYINT', kind: 'সংখ্যা', desc: 'খুব ছোট পূর্ণসংখ্যা: -128 থেকে 127।', good: '120', bad: '128'},
+        {type: 'SMALLINT', kind: 'সংখ্যা', desc: 'ছোট পূর্ণসংখ্যা: -32768 থেকে 32767।', good: '32000', bad: '40000'},
+        {type: 'INT', kind: 'সংখ্যা', desc: 'পূর্ণসংখ্যা, যেমন বয়স, রোল, নম্বর।', good: '25', bad: '12.5'},
+        {type: 'BIGINT', kind: 'সংখ্যা', desc: 'অনেক বড় পূর্ণসংখ্যা; এই ল্যাবে নিরাপদ পূর্ণসংখ্যা পর্যন্ত।', good: '9000000000', bad: "'Big Number'"},
+        {type: 'DECIMAL(5,2)', kind: 'সংখ্যা', desc: 'মোট ৫ অঙ্ক, দশমিকের পরে সর্বোচ্চ ২ অঙ্ক।', good: '123.45', bad: '1234.56'},
+        {type: 'FLOAT', kind: 'সংখ্যা', desc: 'আনুমানিক দশমিক সংখ্যা, যেমন 4.75।', good: '4.75', bad: "'four'"},
+        {type: 'DOUBLE', kind: 'সংখ্যা', desc: 'FLOAT-এর তুলনায় বেশি সূক্ষ্ম দশমিক সংখ্যা।', good: '3.1415926', bad: "'3.14'"},
+        {type: 'CHAR(3)', kind: 'লেখা', desc: 'নির্দিষ্ট দৈর্ঘ্যের অক্ষর; ছোট কোডের জন্য।', good: "'ABC'", bad: "'ABCD'"},
+        {type: 'VARCHAR(5)', kind: 'লেখা', desc: 'সর্বোচ্চ ৫টি অক্ষরের পরিবর্তনশীল লেখা।', good: "'Rafi'", bad: "'Bangladesh'"},
+        {type: 'TEXT', kind: 'লেখা', desc: 'লম্বা লেখা, মন্তব্য বা ঠিকানা।', good: "'Hello, Bangladesh!'", bad: '123'},
+        {type: 'DATE', kind: 'তারিখ–সময়', desc: 'ক্যালেন্ডারের তারিখ: YYYY-MM-DD।', good: "'2026-11-05'", bad: "'2026-02-30'"},
+        {type: 'TIME', kind: 'তারিখ–সময়', desc: 'এই ল্যাবে সময়: HH:MM:SS (২৪ ঘণ্টা ঘড়ি)।', good: "'14:30:05'", bad: "'25:70:00'"},
+        {type: 'DATETIME', kind: 'তারিখ–সময়', desc: 'তারিখ ও সময় একসঙ্গে।', good: "'2026-11-05 14:30:05'", bad: "'2026-11-05'"},
+        {type: 'BOOLEAN', kind: 'সত্য–মিথ্যা', desc: 'সত্য/মিথ্যা: TRUE, FALSE, 1, 0।', good: 'TRUE', bad: "'Yes'"}
+      ];
+      let activeDatatype = 'VARCHAR(5)', activeDatatypeFilter = 'সব';
+      const datatypeKinds = ['সব', 'সংখ্যা', 'লেখা', 'তারিখ–সময়', 'সত্য–মিথ্যা'];
+      function exampleForType(name) {
+        const found = datatypeList.find(x => x.type.toUpperCase() === name.toUpperCase()); if (found) return found;
+        if (/^VARCHAR\(\d+\)$/i.test(name) || /^CHAR\(\d+\)$/i.test(name)) {
+          const length = +(name.match(/\d+/) || [])[0]; return {type: name, kind: 'লেখা', desc: 'নিজের বাছাই করা দৈর্ঘ্য অনুযায়ী টেক্সট।', good: "'" + 'A'.repeat(Math.max(1, Math.min(length, 5))) + "'", bad: "'" + 'B'.repeat(Math.max(2, Math.min(length + 1, 20))) + "'"}
+        }
+        if (/^DECIMAL\(\d+,\d+\)$/i.test(name)) return {type: name, kind: 'সংখ্যা', desc: 'নির্দিষ্ট precision ও scale-এর দশমিক।', good: '0', bad: "'abc'"};
+        if (/^(INTEGER|BOOL)$/i.test(name)) {const base = datatypeList.find(x => x.type === (name.toUpperCase() === 'INTEGER' ? 'INT' : 'BOOLEAN')); return {...base, type: name}}
+        return {type: name, kind: 'নিজস্ব', desc: 'নিজের Data Type দিয়ে পরীক্ষা করো।', good: '1', bad: "'abc'"}
+      }
+      function showDatatypeCards() {
+        $('dtype-filters').innerHTML = datatypeKinds.map(k => '<button type="button" class="dtype-filter ' + (k === activeDatatypeFilter ? 'active' : '') + '" data-kind="' + escapeHTML(k) + '">' + escapeHTML(k) + '</button>').join('');
+        $('dtype-grid').innerHTML = datatypeList.filter(x => activeDatatypeFilter === 'সব' || x.kind === activeDatatypeFilter).map(x => '<button type="button" class="dtype-card ' + (x.type === activeDatatype ? 'selected' : '') + '" data-dtype="' + escapeHTML(x.type) + '"><span class="dtype-top"><span class="dtype-title">' + escapeHTML(x.type) + '</span><span class="dtype-kind">' + escapeHTML(x.kind) + '</span></span><span class="dtype-descr">' + escapeHTML(x.desc) + '</span><span class="dtype-sample"><em>✓ ঠিক</em> <code>' + escapeHTML(x.good) + '</code></span><span class="dtype-sample invalid"><em>✕ ভুল</em> <code>' + escapeHTML(x.bad) + '</code></span><span class="dtype-bottom">পরীক্ষা করো ↗</span>' + (x.type === activeDatatype ? '<span class="dtype-card-result">✓ <code>' + escapeHTML(x.good) + '</code> — গ্রহণযোগ্য উদাহরণ। অন্য মানও উপরে পরীক্ষা করো।</span>' : '') + '</button>').join('');
+        for (const btn of $('dtype-grid').querySelectorAll('[data-dtype]')) btn.onclick = () => selectDatatypeByName(btn.dataset.dtype);
+        for (const btn of $('dtype-filters').querySelectorAll('[data-kind]')) btn.onclick = () => {activeDatatypeFilter = btn.dataset.kind; showDatatypeCards()}
+      }
+      function selectDatatypeByName(name) {
+        const item = exampleForType(name); activeDatatype = item.type;
+        $('dtype-type-input').value = item.type; $('dtype-value-input').value = item.good;
+        if (!datatypeList.some(x => x.type === name)) {activeDatatypeFilter = 'সব'} else if (activeDatatypeFilter !== 'সব' && !datatypeList.some(x => x.type === name && x.kind === activeDatatypeFilter)) activeDatatypeFilter = 'সব';
+        showDatatypeCards(); showTypeCheck()
+      }
+      function showTypeCheck() {
+        const typeName = $('dtype-type-input').value.trim().toUpperCase().replace(/\s+/g, ''); const inputValue = $('dtype-value-input').value.trim();
+        const out = $('dtype-check-result');
+        try {
+          if (!typeName) fail('Data Type খালি আছে।', 'যেমন: INT বা VARCHAR(5)');
+          if (!inputValue) fail('SQL Value খালি আছে।', "যেমন: 25 বা 'Rafi'");
+          const c = parseDef('sample_value ' + typeName), v = literal(inputValue), checked = checkType(c, v);
+          out.className = 'dtype-check-result ok';
+          out.innerHTML = '<strong>✅ গ্রহণযোগ্য মান!</strong><p><code>' + escapeHTML(inputValue) + '</code> → <b>' + escapeHTML(typeName) + '</b> ঠিক আছে।' + (checked === null ? ' কলাম NOT NULL না হলে NULL রাখা যায়।' : '') + '</p>';
+        } catch (error) {out.className = 'dtype-check-result error'; out.innerHTML = '<strong>❌ গ্রহণযোগ্য নয়</strong><p>' + escapeHTML(error.message) + (error.hint ? ' ' + escapeHTML(error.hint) : '') + '</p>'}
+        updateTypeSQLPreview()
+      }
+      function updateTypeSQLPreview() {
+        const t = $('dtype-type-input').value.trim().toUpperCase().replace(/\s+/g, '') || 'VARCHAR(5)';
+        const value = $('dtype-value-input').value.trim() || "'Rafi'";
+        const code = 'DROP TABLE IF EXISTS TypePractice;\nCREATE TABLE TypePractice (\n  id INT PRIMARY KEY,\n  sample_value ' + t + '\n);\nINSERT INTO TypePractice (id, sample_value) VALUES (1, ' + value + ');';
+        $('dtype-sql-preview').textContent = code; return code
+      }
+      $('dtype-check-btn').addEventListener('click', showTypeCheck);
+      for (const id of ['dtype-type-input', 'dtype-value-input']) {
+        $(id).addEventListener('input', updateTypeSQLPreview);
+        $(id).addEventListener('keydown', e => {if (e.key === 'Enter') {e.preventDefault(); showTypeCheck()} })
+      }
+      $('dtype-correct-btn').addEventListener('click', () => {const type = $('dtype-type-input').value.trim().toUpperCase().replace(/\s+/g, ''); $('dtype-value-input').value = exampleForType(type).good; showTypeCheck()});
+      $('dtype-wrong-btn').addEventListener('click', () => {const type = $('dtype-type-input').value.trim().toUpperCase().replace(/\s+/g, ''); $('dtype-value-input').value = exampleForType(type).bad; showTypeCheck()});
+      $('dtype-to-editor').addEventListener('click', () => {const sql = updateTypeSQLPreview(); $('sql-input').value = sql; for (const b of $('examples').querySelectorAll('button')) b.classList.remove('active'); $('sql-input').scrollIntoView({behavior: 'smooth', block: 'center'}); $('sql-input').focus()});
+      showDatatypeCards(); updateTypeSQLPreview();
+      render();
+    })();
+  </script>
 </body>
+
 </html>
