@@ -6,7 +6,7 @@
   <meta name="viewport" content="width=device-width,initial-scale=1">
   <meta name="color-scheme" content="light">
   <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='14' fill='%235146df'/%3E%3Cellipse cx='32' cy='17' rx='17' ry='7' fill='none' stroke='white' stroke-width='4'/%3E%3Cpath d='M15 17v29c0 4 8 7 17 7s17-3 17-7V17M15 31c0 4 8 7 17 7s17-3 17-7M15 44c0 4 8 7 17 7s17-3 17-7' fill='none' stroke='white' stroke-width='4' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E">
-  <title>SQL Query Simulator — HSC ICT</title>
+  <title>SQLপাঠ — Learn SQL by Writing Real Queries</title>
   <style>
     :root {
       --ink: #14213b;
@@ -1359,10 +1359,27 @@
       }
     }
   </style>
+  <link rel="stylesheet" href="assets/platform.css">
+  <meta name="description" content="Learn SQL in Bangla with interactive lessons, an isolated SQLite playground, data types and practice challenges.">
 </head>
 
 <body>
-  <main class="container" id="sqlApp">
+<a href="#learning" class="skip">Skip to lessons</a>
+<nav class="site-nav" aria-label="Main navigation"><a href="#home" class="brand"><b>▤</b> SQL<span>পাঠ</span></a><div class="nav-links"><a href="#learning">Learn SQL</a><a href="#playground">Playground</a><a href="#practice">Practice</a><a href="#datatype-academy">Data Types</a><a href="#cheatsheet">Cheat Sheet</a></div><button id="theme-toggle" class="theme-btn" type="button" aria-label="Switch color theme">◐ Theme</button></nav>
+<div class="platform" id="home">
+<header class="welcome"><div><span class="overline">A little theory. A lot of practice.</span><h1>Learn SQL by<br>Writing <em>Real Queries</em></h1><p>Understand SQL commands, explore data types, and practice queries in an interactive SQL playground.</p><p>শূন্য থেকে শুরু করো। বাংলায় বুঝে নাও, নিজের query চালাও, আর ফলাফল দেখে শেখো।</p><div class="cta-row"><a class="cta" href="#learning">Start Learning SQL →</a><a class="cta outline" href="#playground">⌘ Open SQL Playground</a></div><div class="hero-proof">✓ No signup &nbsp; ✓ Runs in your browser &nbsp; ✓ Learn at your pace</div></div><div class="preview" aria-label="SQL example preview"><div class="preview-top"><i class="window-dot"></i><i class="window-dot"></i><i class="window-dot"></i><span style="margin-left:10px">first-query.sql · SQLite</span></div><pre><span class="sql-keyword">SELECT</span> name, age
+<span class="sql-keyword">FROM</span> students
+<span class="sql-keyword">WHERE</span> age &gt; <span class="sql-number">20</span>;</pre><table><thead><tr><th>name</th><th>age</th></tr></thead><tbody><tr><td>Rahim</td><td>21</td></tr><tr><td>Nila</td><td>22</td></tr><tr><td>Mitu</td><td>23</td></tr></tbody></table><div class="preview-bottom">✓ 3 rows returned · Your first discovery.</div></div></header>
+<div class="section-top"><div><span class="overline">Your learning toolkit</span><h2>Small steps. Real understanding.</h2><p>SQL হলো relational database-এর তথ্য পড়া, যোগ করা ও বদলানোর ভাষা।</p></div><span class="progress-label" id="overall-progress"></span></div>
+<div class="path-grid"><a href="#learning" class="path-card"><span class="path-icon">01</span><h3>SQL Fundamentals</h3><p>টেবিল, row, column থেকে প্রথম SELECT।</p><small>Explore 30 lessons →</small></a><a href="#playground" class="path-card"><span class="path-icon">&gt;_</span><h3>Your SQL playground</h3><p>আসল SQLite query, তাৎক্ষণিক ফলাফল।</p><small>Write your first query →</small></a><a href="#datatype-academy" class="path-card"><span class="path-icon">Aa</span><h3>Know your data types</h3><p>সংখ্যা, লেখা, তারিখ—মান দিয়ে পরীক্ষা করো।</p><small>Explore data types →</small></a><a href="#practice" class="path-card"><span class="path-icon">✓</span><h3>Put it into practice</h3><p>সহজ থেকে কঠিন ১২টি practical challenge।</p><small>Solve a challenge →</small></a></div>
+<section id="learning" aria-label="SQL lessons"><div class="section-top"><div><span class="overline">01 / Learn the building blocks</span><h2>One concept at a time.</h2><p>বেছে নাও → বুঝে নাও → নিজে চালাও।</p></div><div><span id="lesson-progress" class="progress-label"></span><div class="progress-track"><div id="progress-fill" class="progress-fill"></div></div></div></div><div class="learn-shell"><details class="lesson-sidebar" open><summary>SQL lesson library</summary><label><span class="guide-label" style="margin:10px 0 0">Search topics</span><input class="search-input" id="lesson-search" type="search" placeholder="SELECT, JOIN, keys…"></label><label><span class="guide-label" style="margin:10px 0 0">Command category</span><select class="category-select" id="lesson-category"><option value="all">All topics</option><option>DDL</option><option>DML</option><option>DQL</option><option>DCL</option><option>TCL</option><option>Concept</option></select></label><div id="topic-list" class="topic-list"></div></details><article class="lesson-main" id="lesson-content" aria-live="polite"></article></div></section>
+<section id="playground" aria-label="SQLite playground"><div class="section-top"><div><span class="overline">02 / Learn by doing</span><h2>Your query. Your discovery.</h2><p>SQLite · শুধু এই tab-এর memory-তে চলে · ৫ সেকেন্ড query limit</p></div><span class="engine-tag" id="engine-state">Loading SQLite…</span></div><div class="workspace"><div class="play-panel"><div class="play-head"><h3>⌨ SQL Playground</h3><span class="progress-label">school.db / isolated sandbox</span></div><div class="play-body"><div class="editor-toolbar"><label for="query-example" class="progress-label">Example</label><select id="query-example" aria-label="Choose query example"></select><button type="button" class="small-btn" id="copy-query">Copy</button><button type="button" class="small-btn" id="clear-query">Clear</button></div><label for="query-editor" class="guide-label">Your SQL query</label><div class="code-editor"><pre id="line-numbers" class="line-numbers" aria-hidden="true">1</pre><div class="editor-stack"><pre class="editor-highlight" id="editor-highlight" aria-hidden="true"></pre><textarea id="query-editor" class="real-editor" aria-label="SQL query editor" spellcheck="false" autocapitalize="off" autocomplete="off" wrap="off">SELECT * FROM students;</textarea></div></div><div class="run-row"><button id="execute-query" type="button" class="primary" disabled>▶ Run Query</button><button id="reset-sandbox" type="button" class="small-btn" disabled>↻ Reset sample DB</button><small>Ctrl / ⌘ + Enter · Tab to indent</small></div><div id="execution-status" class="execution-status" role="status" aria-live="polite">Preparing your SQLite workspace…</div><div id="query-results" class="results"></div><details style="margin-top:15px"><summary class="progress-label">Recently practiced queries</summary><div id="recent-queries" class="recent-list"></div></details></div></div><aside class="play-panel" aria-label="SQLite database explorer"><div class="play-head"><h3>▤ Database explorer</h3><span class="engine-tag">LIVE SCHEMA</span></div><div class="play-body"><div id="sandbox-tabs" class="explorer-tabs"></div><div id="sandbox-table"></div><div id="sandbox-relationships" class="relationships"></div><p class="progress-label">PK = Primary key · FK = Foreign key<br>Explorer shows up to 100 rows per table.</p></div></aside></div></section>
+<section id="practice" aria-label="Practice challenges"><div class="section-top"><div><span class="overline">03 / Make it stick</span><h2>A little challenge goes a long way.</h2><p>প্রতিটি Check Answer নতুন sample data ব্যবহার করে; তোমার playground বদলায় না।</p></div><span id="challenge-progress" class="progress-label"></span></div><div class="exercise-card"><div class="exercise-controls"><select id="challenge-level" aria-label="Challenge difficulty"><option>All levels</option><option>Beginner</option><option>Intermediate</option><option>Advanced</option></select><select id="challenge-select" aria-label="Choose challenge"></select></div><div id="challenge-content"></div><div class="lesson-actions"><button type="button" class="primary" id="challenge-load">Try in playground ↑</button><button type="button" class="secondary" id="challenge-check" disabled>✓ Check Answer</button></div><p class="progress-label">Check Answer uses the current playground editor. Tables: students, departments, courses, enrollments.</p><div id="challenge-feedback" class="challenge-feedback" role="status" aria-live="polite"></div></div></section>
+<section aria-label="Learning roadmap"><div class="section-top"><div><span class="overline">Find your next step</span><h2>From curious to confident.</h2></div></div><div class="roadmap"><a href="#learning" data-lesson-link="0"><span class="overline">01 · Beginner</span><strong>Read & explore</strong><p>SELECT → WHERE → ORDER BY → Data types</p></a><a href="#learning" data-lesson-link="10"><span class="overline">02 · Intermediate</span><strong>Connect the dots</strong><p>GROUP BY → HAVING → JOIN → Subqueries</p></a><a href="#learning" data-lesson-link="24"><span class="overline">03 · Advanced</span><strong>Think in relationships</strong><p>Multiple JOINs → Constraints → Transactions</p></a></div></section>
+<section id="cheatsheet" aria-label="SQL cheat sheet"><div class="section-top"><div><span class="overline">Keep this close</span><h2>Your SQL cheat sheet.</h2><p>প্রয়োজনের সময় syntax দেখে নাও।</p></div><button type="button" class="small-btn" id="reset-progress">Reset learning progress</button></div><div id="cheat-grid" class="cheat-grid"></div></section>
+</div>
+
+  <details class="legacy-toggle" id="strict-simulator"><summary>🧪 Original HSC strict simulator · CREATE, INSERT, UPDATE, ALTER, DELETE &amp; DROP</summary><main class="container" id="sqlApp">
     <header class="hero">
       <span class="eyebrow"><i class="dot"></i> HSC ICT · CHAPTER 06 · LIVE PRACTICE</span>
       <h1>SQL Query Simulator</h1>
@@ -1510,12 +1527,14 @@ INSERT INTO TypePractice VALUES (1, 'Rafi');</pre>
     </div>
     <div class="footer">শিক্ষামূলক SQL সিমুলেটর • বাস্তব সার্ভার বা ডেটাবেসে কোনো পরিবর্তন হয় না • SQL-এর নির্বাচিত
       প্রাথমিক নিয়ম সমর্থন করে</div>
-  </main>
+  </main></details>
+  <div class="platform" id="datatype-home"></div>
+  <footer class="site-footer">SQLপাঠ · Learn by doing, one query at a time. Progress stays on this device. Database changes last until reset or reload.</footer>
   <script>
     (() => {
       'use strict';
       const app = document.getElementById('sqlApp');
-      const $ = id => app.querySelector('#' + id);
+      const $ = id => document.getElementById(id);
       const examples = [
         {cmd: 'CREATE', title: 'টেবিল তৈরি', sql: "CREATE TABLE Students (\n  id INT PRIMARY KEY,\n  name VARCHAR(50) NOT NULL,\n  gpa DECIMAL(3,2)\n);"},
         {cmd: 'INSERT', title: 'রেকর্ড যোগ', sql: "INSERT INTO Students (id, name, gpa)\nVALUES (1, 'Rahim', 4.75), (2, 'Karim', 4.50);"},
@@ -1710,7 +1729,7 @@ INSERT INTO TypePractice VALUES (1, 'Rafi');</pre>
       function exampleForType(name) {
         const found = datatypeList.find(x => x.type.toUpperCase() === name.toUpperCase()); if (found) return found;
         if (/^VARCHAR\(\d+\)$/i.test(name) || /^CHAR\(\d+\)$/i.test(name)) {
-          const length = +(name.match(/\d+/) || [])[0]; return {type: name, kind: 'লেখা', desc: 'নিজের বাছাই করা দৈর্ঘ্য অনুযায়ী টেক্সট।', good: "'" + 'A'.repeat(Math.max(1, Math.min(length, 5))) + "'", bad: "'" + 'B'.repeat(Math.max(2, Math.min(length + 1, 20))) + "'"}
+          const length = +(name.match(/\d+/) || [])[0]; return {type: name, kind: 'লেখা', desc: 'নিজের বাছাই করা দৈর্ঘ্য অনুযায়ী টেক্সট।', good: "'" + 'A'.repeat(Math.max(1, Math.min(length, 5))) + "'", bad: "'" + 'B'.repeat(Math.max(2, Math.min(length + 1, 65536))) + "'"}
         }
         if (/^DECIMAL\(\d+,\d+\)$/i.test(name)) return {type: name, kind: 'সংখ্যা', desc: 'নির্দিষ্ট precision ও scale-এর দশমিক।', good: '0', bad: "'abc'"};
         if (/^(INTEGER|BOOL)$/i.test(name)) {const base = datatypeList.find(x => x.type === (name.toUpperCase() === 'INTEGER' ? 'INT' : 'BOOLEAN')); return {...base, type: name}}
@@ -1748,7 +1767,7 @@ INSERT INTO TypePractice VALUES (1, 'Rafi');</pre>
       }
       $('dtype-check-btn').addEventListener('click', showTypeCheck);
       for (const id of ['dtype-type-input', 'dtype-value-input']) {
-        $(id).addEventListener('input', updateTypeSQLPreview);
+        $(id).addEventListener('input', showTypeCheck);
         $(id).addEventListener('keydown', e => {if (e.key === 'Enter') {e.preventDefault(); showTypeCheck()} })
       }
       $('dtype-correct-btn').addEventListener('click', () => {const type = $('dtype-type-input').value.trim().toUpperCase().replace(/\s+/g, ''); $('dtype-value-input').value = exampleForType(type).good; showTypeCheck()});
@@ -1758,6 +1777,8 @@ INSERT INTO TypePractice VALUES (1, 'Rafi');</pre>
       render();
     })();
   </script>
+  <script src="assets/curriculum.js"></script>
+  <script src="assets/platform.js"></script>
 </body>
 
 </html>
