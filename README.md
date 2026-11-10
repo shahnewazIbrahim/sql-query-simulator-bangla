@@ -20,14 +20,17 @@ No package installation or build is required. Static hosts can serve the reposit
 
 ## Features
 
-- Responsive homepage, navigation, theme toggle, keyboard-accessible controls, reduced-motion support.
+- Separate responsive pages for SQL lessons, the SQLite playground, practice challenges, data types, and the cheat sheet.
+- Every page starts with the shared "Learn SQL by Writing Real Queries" banner.
+- Homepage shows the original HSC simulator directly below the banner as a permanently visible section.
+- Shared navigation, theme toggle, keyboard-accessible controls, and reduced-motion support.
 - 30 searchable lessons across DDL/DML/DQL/DCL/TCL and relationships; 28 executable SQLite examples, two server permission reference lessons.
-- Local SQLite playground with highlighted editor, line numbers, indentation, copy/clear, example selector, Ctrl/Cmd+Enter, multiple result sets, row counts, timing and educational errors.
+- Local SQLite playground with indentation, copy/clear, example selector, Ctrl/Cmd+Enter, multiple result sets, row counts and timing.
 - Live database schema, primary/foreign keys, relationship list, and four seeded school tables.
 - 12 challenges with hints, solutions and behavior-based checking against fresh, isolated sample databases.
 - Lesson/challenge completion and ten recent successful queries saved in localStorage. Storage failures do not prevent learning.
-- Original strict HSC simulator preserved in an expandable section. Its interactive type lab remains directly accessible, with live checks, custom values and SQL transfer to the original editor.
-- Type suggestions, dialect comparisons, cheat sheet, roadmap, and local progress reset.
+- Original strict HSC simulator remains directly visible on the homepage. Its interactive type lab includes live checks and custom values.
+- A data-type quick guide, SQL cheat sheet, and local progress reset.
 
 ## Execution and limits
 
@@ -44,16 +47,19 @@ Challenges use fresh seed data, never the current playground. Read challenges co
 - The original simulator is a deliberately strict, simplified MySQL-style teaching implementation, including simplified CHAR/BOOLEAN/TIME behavior and JavaScript safe-integer limits.
 - SQLite uses affinity: `VARCHAR(n)` lengths and `DECIMAL(p,s)` precision are not enforced. Use `CHECK` constraints, or integer minor currency units, when appropriate. SQLite has no dedicated DATE/DATETIME or BOOLEAN storage class. Large 64-bit integer results may lose precision when exposed as JavaScript numbers.
 - SQLite supports the demonstrated JOINs, aggregation, subqueries, transactions, ADD COLUMN and RENAME. MySQL `MODIFY COLUMN`, `RENAME TABLE`, `TRUNCATE`, `GRANT`, `REVOKE`, and inline `ENUM` are not supported in this playground. DCL lessons are explicitly reference-only; TRUNCATE teaches the executable DELETE alternative.
-- No Monaco/CodeMirror dependency, automatic SQL formatter or autocomplete is included; the lightweight editor supports highlighting, indentation and line numbers.
+- No Monaco/CodeMirror dependency, SQL formatter, autocomplete, or syntax highlighting is included; the lightweight editor supports tab indentation.
 - Documentation is bilingual rather than a complete language-switching translation system. Progress is local, with no cross-device account synchronization.
 
 References: [SQLite data types](https://www.sqlite.org/datatype3.html), [ALTER TABLE](https://www.sqlite.org/lang_altertable.html).
 
 ## Files
 
-- `index.html`: original app and new semantic page structure.
+- `index.html`: homepage banner and original HSC simulator.
+- `learn.html`, `playground.html`, `practice.html`, `data-types.html`, `cheat-sheet.html`: dedicated learning pages.
+- `assets/app.css`: shared page and HSC simulator styles.
+- `assets/pages.js`: page-specific lesson, playground, practice, data-type, and cheat-sheet interactions.
 - `assets/platform.css`: responsive design and themes.
-- `assets/platform.js`: lessons, editor, challenges, progress and explorer UI.
+- `assets/platform.js`: retained legacy single-page runtime; the dedicated pages use `assets/pages.js`.
 - `assets/curriculum.js`: shared lessons, exercises and seed data.
 - `assets/sql-worker.js`: isolated execution, limits and challenge checks.
 - `assets/sql-wasm.js`, `assets/sql-wasm.wasm`: vendored sql.js runtime.

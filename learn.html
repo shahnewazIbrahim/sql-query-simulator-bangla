@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="bn">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <meta name="color-scheme" content="light">
+  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='14' fill='%235146df'/%3E%3Cellipse cx='32' cy='17' rx='17' ry='7' fill='none' stroke='white' stroke-width='4'/%3E%3Cpath d='M15 17v29c0 4 8 7 17 7s17-3 17-7V17M15 31c0 4 8 7 17 7s17-3 17-7M15 44c0 4 8 7 17 7s17-3 17-7' fill='none' stroke='white' stroke-width='4' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E">
+  <title>SQLপাঠ — Learn SQL</title>
+  <link rel="stylesheet" href="assets/app.css">
+
+  <link rel="stylesheet" href="assets/platform.css">
+  <meta name="description" content="Learn SQL in Bangla with interactive lessons, an isolated SQLite playground, data types and practice challenges.">
+</head>
+
+<body data-page="learn">
+<a href="#main" class="skip">Skip to content</a>
+<nav class="site-nav" aria-label="Main navigation"><a href="index.html" class="brand"><b>▤</b> SQL<span>পাঠ</span></a><div class="nav-links"><a href="learn.html">Learn SQL</a><a href="playground.html">Playground</a><a href="practice.html">Practice</a><a href="data-types.html">Data Types</a><a href="cheat-sheet.html">Cheat Sheet</a></div><button id="theme-toggle" class="theme-btn" type="button" aria-label="Switch color theme">◐ Theme</button></nav>
+<div class="platform" id="home"><div class="welcome-wrap"><header class="welcome"><div><span class="overline">A little theory. A lot of practice.</span><h1>Learn SQL by<br>Writing <em>Real Queries</em></h1><p>Understand SQL commands, explore data types, and practice queries in an interactive SQL playground.</p><p>শূন্য থেকে শুরু করো। বাংলায় বুঝে নাও, নিজের query চালাও, আর ফলাফল দেখে শেখো।</p><div class="cta-row"><a class="cta" href="learn.html">Start Learning SQL →</a><a class="cta outline" href="playground.html">⌘ Open SQL Playground</a></div><div class="hero-proof">✓ No signup &nbsp; ✓ Runs in your browser &nbsp; ✓ Learn at your pace</div></div><div class="preview" aria-label="SQL example preview"><div class="preview-top"><i class="window-dot"></i><i class="window-dot"></i><i class="window-dot"></i><span style="margin-left:10px">first-query.sql · SQLite</span></div><pre><span class="sql-keyword">SELECT</span> name, age
+<span class="sql-keyword">FROM</span> students
+<span class="sql-keyword">WHERE</span> age &gt; <span class="sql-number">20</span>;</pre><table><thead><tr><th>name</th><th>age</th></tr></thead><tbody><tr><td>Rahim</td><td>21</td></tr><tr><td>Nila</td><td>22</td></tr><tr><td>Mitu</td><td>23</td></tr></tbody></table><div class="preview-bottom">✓ 3 rows returned · Your first discovery.</div></div></header></div></div>
+<main class="platform page-content" id="main"><div class="section-top"><div><span class="overline">SQLপাঠ · Learn SQL</span><h1>Learn SQL</h1></div></div>
+<section id="learning" aria-label="SQL lessons"><div class="section-top"><div><span class="overline">01 / Learn the building blocks</span><h2>One concept at a time.</h2><p>বেছে নাও → বুঝে নাও → নিজে চালাও।</p></div><div><span id="lesson-progress" class="progress-label"></span><div class="progress-track"><div id="progress-fill" class="progress-fill"></div></div></div></div><div class="learn-shell"><details class="lesson-sidebar" open><summary>SQL lesson library</summary><label><span class="guide-label" style="margin:10px 0 0">Search topics</span><input class="search-input" id="lesson-search" type="search" placeholder="SELECT, JOIN, keys…"></label><label><span class="guide-label" style="margin:10px 0 0">Command category</span><select class="category-select" id="lesson-category"><option value="all">All topics</option><option>DDL</option><option>DML</option><option>DQL</option><option>DCL</option><option>TCL</option><option>Concept</option></select></label><div id="topic-list" class="topic-list"></div></details><article class="lesson-main" id="lesson-content" aria-live="polite"></article></div></section>
+</main>
+<footer class="site-footer">SQLপাঠ · Learn by doing, one query at a time. Progress stays on this device.</footer>
+<script src="assets/curriculum.js"></script><script src="assets/pages.js"></script>
+</body>
+</html>
